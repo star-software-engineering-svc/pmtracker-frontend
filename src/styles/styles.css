@@ -1,0 +1,50 @@
+body {
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+.nav-logo {
+    width: 32px;
+    height: 32px;
+}
+
+.footer {
+    background: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.bg-color1 {
+    background-color: #6699CC;
+}
+
+.bg-color2 {
+    background-color: #99CCFF;
+}
+
+.center-block {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.home-click-block {
+    cursor: pointer;
+}
+
+.home-click-block:hover {
+    color: white;
+}
+
+.mainbody {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.no-underline-link {
+    text-decoration: none;
+}
