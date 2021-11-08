@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Container, Modal, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { ReportTrackModal } from './modal/ReportTrackModal';
 import { CallPmTrackModal } from './modal/CallPmTrackModal';
@@ -17,6 +17,19 @@ export function Home() {
   const handleShowCall = () => {
     setShow(false);
     setShowCall(true);
+  }
+  const navigate = useNavigate();
+
+  const onPropertyManager = () => {
+    navigate("/dashboard");
+  }
+
+  const onBoardMember = () => {
+
+  }
+
+  const onAboutUs = () => {
+
   }
 
   return (
@@ -39,15 +52,15 @@ export function Home() {
         </div>
       </div>
       <div className="tw-text-center tw-grid tw-grid-cols-3 tw-gap-1 mt-1">
-        <div className="tw-p-10 tw-bg-green-300 home-click-block">
+        <div className="tw-p-10 tw-bg-green-300 home-click-block" onClick={onPropertyManager}>
           <i className="fa fa-dot-circle-o fa-5x" />
           <div className="tw-text-2xl">Property Managers</div>
         </div>
-        <div className="tw-p-10 tw-bg-green-300 home-click-block">
+        <div className="tw-p-10 tw-bg-green-300 home-click-block" onClick={onBoardMember}>
           <i className="fa fa-suitcase fa-5x" />
           <div className="tw-text-2xl">Board Members/<br />Building Owners</div>
         </div>
-        <div className="tw-p-10 tw-bg-green-300 home-click-block">
+        <div className="tw-p-10 tw-bg-green-300 home-click-block" onClick={onAboutUs}>
           <i className="fa fa-envelope-o fa-5x" />
           <div className="tw-text-2xl">About Us</div>
         </div>

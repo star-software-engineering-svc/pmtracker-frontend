@@ -48,3 +48,14 @@ body {
 .no-underline-link {
     text-decoration: none;
 }
+
+.login-container {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    padding: 2.5rem;
+    /*background-color: #f9f9f9;*/
+    border-radius: 1rem;
+}
