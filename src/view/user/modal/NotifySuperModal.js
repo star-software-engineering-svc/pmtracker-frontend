@@ -7,14 +7,15 @@ import { getToken, setToken, setUser } from '../../../features/user/userSlice';
 import { warning } from '../../helper/snack';
 import { notifySuper } from '../../../service/ManagerService';
 
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-
 export function NotifySuperModal({ shown, handleClose, ticket, onSuccess }) {
 
   const dispatch = useDispatch();
   const token = useSelector(getToken);
 
+  const [message, setMessage] = useState("");
+  const onChangeStatus = (event) => {
+    setMessage(event.target.value);
+  }
   const onSave = () => {
     notifySuper(token, ticket.ticket_id, message).then(response => {
       console.log(response);
@@ -33,11 +34,9 @@ export function NotifySuperModal({ shown, handleClose, ticket, onSuccess }) {
     });
   }
 
-  const [message, setMessage] = useState('');
-
   return (
     <>
-      <Modal show={shown} onHide={handleClose} size="lg">
+      <Modal show={shown} onHide={handleClose} size="md">
         <Modal.Header closeButton>
           <Modal.Title>Update Ticket Status</Modal.Title>
         </Modal.Header>
@@ -55,7 +54,10 @@ export function NotifySuperModal({ shown, handleClose, ticket, onSuccess }) {
             <div>Unit #: {ticket.unit_number}</div>
             <div>Ticket Code #: {ticket.code}</div>
           </div>
-          <ReactQuill theme="snow" value={message} onChange={setMessage} />
+          <Form.Group className="mb-3" controlId="txt_description">
+            <Form.Label>Message</Form.Label>
+            <Form.Control as="textarea" rows={3} onChange={onChangeStatus} />
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={onSave}>Save</Button>
