@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setToken,
@@ -7,9 +8,7 @@ import {
   getToken
 } from '../../features/user/userSlice';
 
-import { login } from '../../service/AuthService';
-
-import { Form, Button } from 'react-bootstrap';
+import { login } from '../../service/ManagerService';
 
 export function Login() {
 
@@ -19,6 +18,9 @@ export function Login() {
   const token = useSelector(getToken);
 
   const [validated, setValidated] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -30,23 +32,28 @@ export function Login() {
     }
 
     setValidated(true);
-    login('tomracanelli@outlook.com', '123456').then((response) => {
+    login(email, password).then((response) => {
       console.log(response.data);
       dispatch(setToken(response.data.access_token));
       dispatch(setUser(response.data.user));
 
       navigate('/dashboard');
+    }).catch((error) => {
+      console.log(error.response.status);
+      if (error.response.status == 422 || error.response.status == 401) {
+        setErrorMsg('Please enter the correct email and pasword.');
+      }
     });
   }
 
   return (
     <div className="login-container tw-bg-gray-100">
       <h2>Sign In</h2>
-      {token}
       <Form noValidate onSubmit={handleSubmit} validated={validated}>
+        {errorMsg && (<Alert variant={'warning'}>{errorMsg}</Alert>)}
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" required />
+          <Form.Control type="email" placeholder="Enter email" onChange={e => { setErrorMsg(null); setEmail(e.target.value) }} required />
           <Form.Control.Feedback type="invalid">
             Please enter your email.
           </Form.Control.Feedback>
@@ -57,7 +64,7 @@ export function Login() {
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" required />
+          <Form.Control type="password" placeholder="Password" onChange={e => { setErrorMsg(null); setPassword(e.target.value) }} required />
           <Form.Control.Feedback type="invalid">
             Please enter the password.
           </Form.Control.Feedback>

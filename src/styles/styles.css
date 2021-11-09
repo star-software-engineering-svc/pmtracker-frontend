@@ -59,3 +59,36 @@ body {
     /*background-color: #f9f9f9;*/
     border-radius: 1rem;
 }
+
+.info-inline {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background-color: white;
+    padding: 10px;
+    margin: 2px;
+    border-radius: 7px;
+}
+
+.info-inline > div:first-child {
+    color: #4f4f4f;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info-inline > div:nth-child(2) {
+    font-weight: 500;
+    color: #4f4f4f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.scroll-desc-wrap {
+    height: 240px;
+    overflow-y: auto;
+    overflow-x: auto;
+}

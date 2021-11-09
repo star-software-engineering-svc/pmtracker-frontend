@@ -33,7 +33,7 @@ export function Home() {
   }
 
   return (
-    <Container>
+    <div className="tw-container tw-mx-auto tw-p-3">
       <div className="">
         <div className="tw-text-2xl tw-text-green-400 tw-p-2 tw-text-center">Welcome. Choose your category and connect now!</div>
       </div>
@@ -68,6 +68,6 @@ export function Home() {
 
       <ReportTrackModal show={show} handleClose={handleClose} handleShowCall={handleShowCall}></ReportTrackModal>
       <CallPmTrackModal show={showCall} handleClose={handleCloseCall}></CallPmTrackModal>
-    </Container>
+    </div>
   );
 }
