@@ -17,7 +17,7 @@ export function Dashboard() {
   }
 
   const onNewBuilding = () => {
-    navigate('/new-building');
+    navigate('/building/new');
   }
 
   const onAddBuildingNote = () => {
@@ -25,7 +25,7 @@ export function Dashboard() {
   }
 
   const onAddNewTicket = () => {
-    navigate('/new-new-ticket');
+    navigate('/ticket/new');
   }
 
   return (

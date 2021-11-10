@@ -134,3 +134,47 @@ export function getCarriers(token) {
     }
   });
 }
+
+export function getTicketCategories(token) {
+  return instance.get('manager/ticket/get-ticket-categories', {
+    params: {
+    },
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+}
+
+export function filterBuildings(token, zip, keyword, limit) {
+  return instance.get('manager/buildings/filter-buildings', {
+    params: {
+      zip: zip,
+      keyword: keyword,
+      limit: 30
+    },
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+}
+
+export function createTicket(token, values, attachment1, attachment2) {
+
+  const formData = new FormData();
+  for (const prop in values) {
+    formData.append(prop, values[prop]);
+  }
+
+  if (attachment1)
+    formData.append("attachment1", attachment1, attachment1.name);
+
+  if (attachment2)
+    formData.append("attachment2", attachment2, attachment2.name);
+
+  return instance.post('manager/ticket/create-ticket', formData,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+}

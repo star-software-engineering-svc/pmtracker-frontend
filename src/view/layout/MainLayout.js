@@ -14,6 +14,7 @@ import { getUser, getToken, setUser, setToken } from '../../features/user/userSl
 import { Buildings } from '../user/Buildings';
 import { BuildingDetail } from '../user/BuildingDetail';
 import { BuildingForm } from '../user/BuildingForm';
+import { TicketForm } from '../user/TicketForm';
 
 export const MainLayout = ({ children }) => {
   const token = useSelector(getToken);
@@ -98,6 +99,7 @@ export const MainLayoutRoutes = ({ component: Component, ...rest }) => {
         <Route path="/buildings" element={<RequireAuth><Buildings /></RequireAuth>} />
         <Route path="/building/:building_id" element={<RequireAuth><BuildingDetail /></RequireAuth>} />
         <Route path="/building/new" element={<RequireAuth><BuildingForm /></RequireAuth>} />
+        <Route path="/ticket/new" element={<RequireAuth><TicketForm /></RequireAuth>} />
       </Routes>
     </MainLayout>
   )
