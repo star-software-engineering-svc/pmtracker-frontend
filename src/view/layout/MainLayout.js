@@ -13,6 +13,7 @@ import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import { getUser, getToken, setUser, setToken } from '../../features/user/userSlice';
 import { Buildings } from '../user/Buildings';
 import { BuildingDetail } from '../user/BuildingDetail';
+import { BuildingForm } from '../user/BuildingForm';
 
 export const MainLayout = ({ children }) => {
   const token = useSelector(getToken);
@@ -49,7 +50,7 @@ export const MainLayout = ({ children }) => {
                 <Nav className="ms-auto">
                   <Nav.Link href="/dashboard">Dashboard</Nav.Link>
                   <Nav.Link href="/buildings">View Buildings</Nav.Link>
-                  <Nav.Link href="/new-building">Request New Building</Nav.Link>
+                  <Nav.Link href="/building/new">Request New Building</Nav.Link>
                   {user && (<NavDropdown title={user.name} id="basic-nav-dropdown" align={'end'}>
                     <NavDropdown.Item href="/my-profile">My ccount</NavDropdown.Item>
                     <NavDropdown.Divider />
@@ -96,6 +97,7 @@ export const MainLayoutRoutes = ({ component: Component, ...rest }) => {
         <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
         <Route path="/buildings" element={<RequireAuth><Buildings /></RequireAuth>} />
         <Route path="/building/:building_id" element={<RequireAuth><BuildingDetail /></RequireAuth>} />
+        <Route path="/building/new" element={<RequireAuth><BuildingForm /></RequireAuth>} />
       </Routes>
     </MainLayout>
   )

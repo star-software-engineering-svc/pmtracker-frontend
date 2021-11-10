@@ -5,9 +5,9 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { getToken, setToken, setUser } from '../../../features/user/userSlice';
 
 import { warning } from '../../helper/snack';
-import { notifySuper } from '../../../service/ManagerService';
+import { updateTicketDesc } from '../../../service/ManagerService';
 
-export function NotifySuperModal({ shown, handleClose, ticket, onSuccess }) {
+export function TicketDescModal({ shown, handleClose, ticket, onSuccess }) {
 
   const dispatch = useDispatch();
   const token = useSelector(getToken);
@@ -17,7 +17,7 @@ export function NotifySuperModal({ shown, handleClose, ticket, onSuccess }) {
     setMessage(event.target.value);
   }
   const onSave = () => {
-    notifySuper(token, ticket.ticket_id, message).then(response => {
+    updateTicketDesc(token, ticket.ticket_id, message).then(response => {
       const { type } = response.data;
       if (type == "S_OK") {
         onSuccess();
@@ -40,14 +40,9 @@ export function NotifySuperModal({ shown, handleClose, ticket, onSuccess }) {
           <Modal.Title>Update Ticket Status</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {((ticket.cell_phone == "" || ticket.domain == "") && ticket.supers_email == "") && (<div className="tw-text-red-300">
-            There is inadequate Contact Information on file to send the Superintendant a message.<br /><br />
-            Please be sure that either the Super's <strong>cell phone and cell phone carrier</strong> or their <strong>email address</strong> have been added before using this function.
-          </div>)}
           <div>
-            <div>Super's Name: {ticket.supers_name}</div>
-            <div>Super's Cell #: {ticket.supers_cell}</div>
             <div className="tw-font-medium">Ticket Information</div>
+            <div>ID: {ticket.ticket_id}</div>
             <div>Resident Name: {ticket.resident_name}</div>
             <div>Resident Phone: {ticket.cell_phone}</div>
             <div>Unit #: {ticket.unit_number}</div>

@@ -56,17 +56,6 @@ export function getBuildingTickets(token, building_id) {
   });
 }
 
-export function getInternalNotes(token, building_id) {
-  return instance.get('manager/buildings/internal-notes', {
-    params: {
-      building_id: building_id
-    },
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  });
-}
-
 export function updateTicketStatus(token, ticket_id, ticket_status) {
   return instance.post('manager/buildings/update-ticket-status', {
     ticket_id: ticket_id,
@@ -89,4 +78,59 @@ export function notifySuper(token, ticket_id, message) {
         'Authorization': `Bearer ${token}`
       }
     });
+}
+
+export function updateTicketDesc(token, ticket_id, message) {
+  return instance.post('manager/buildings/update-ticket-desc', {
+    ticket_id: ticket_id,
+    message: message
+  },
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+}
+
+export function createBuilding(token, values) {
+  return instance.post('manager/buildings/create-building', values,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+}
+
+export function addInternalNote(token, ticket_id, cost, message) {
+  return instance.post('manager/internal-note/add-note', {
+    ticket_id: ticket_id,
+    cost: cost,
+    message: message
+  },
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+}
+
+export function getInternalNotes(token, building_id) {
+  return instance.get('manager/internal-note/get-note-list', {
+    params: {
+      building_id: building_id
+    },
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+}
+
+export function getCarriers(token) {
+  return instance.get('manager/carrier/get-carrier-list', {
+    params: {
+    },
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
 }
