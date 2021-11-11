@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import {
   getToken,
   getUser,
@@ -473,7 +473,7 @@ export function BuildingForm() {
                   <Form.Check
                     required
                     name="terms"
-                    label={(<>I've read and agree with the <a href="http://www.google.com">terms and conditions</a></>)}
+                    label={(<>I've read and agree with the <Link to="/terms">terms and conditions</Link></>)}
                     onChange={handleChange}
                     defaultChecked={values.terms}
                     isInvalid={!!errors.terms}

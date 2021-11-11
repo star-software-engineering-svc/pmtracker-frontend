@@ -29,7 +29,7 @@ export function Home() {
   }
 
   const onAboutUs = () => {
-
+    navigate("/about");
   }
 
   return (
