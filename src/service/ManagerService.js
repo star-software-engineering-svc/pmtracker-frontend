@@ -203,3 +203,12 @@ export function getBoardTickets(token, building_id) {
     }
   });
 }
+
+export function updateProfile(token, values) {
+  return instance.post('manager/update-profile', values,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+}

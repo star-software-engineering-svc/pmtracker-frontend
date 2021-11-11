@@ -23,6 +23,7 @@ import { BoardView } from '../user/BoardView';
 import { AdminLogin } from '../admin/AdminLogin';
 import { AdminHome } from '../admin/AdminHome';
 import { RequireAdmin } from '../auth/RequireAdmin';
+import { ManagerProfile } from '../user/ManagerProfile';
 
 export const MainLayout = ({ children }) => {
   const token = useSelector(getToken);
@@ -124,6 +125,7 @@ export const MainLayoutRoutes = ({ component: Component, ...rest }) => {
         <Route path="/building/new" element={<RequireManager><BuildingForm /></RequireManager>} />
         <Route path="/ticket/new" element={<RequireManager><TicketForm /></RequireManager>} />
         <Route path="/note/new" element={<RequireManager><NoteForm /></RequireManager>} />
+        <Route path="/my-profile" element={<RequireManager><ManagerProfile /></RequireManager>} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/terms" element={<Terms />} />
 
