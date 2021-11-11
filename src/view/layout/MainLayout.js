@@ -6,7 +6,7 @@ import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-
 import { Home } from '../user/Home';
 import { Login } from '../user/Login';
 import { Dashboard } from '../user/Dashboard';
-import { RequireAuth } from '../auth/RequireAuth';
+import { RequireManager } from '../auth/RequireManager';
 
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 
@@ -20,6 +20,9 @@ import { AboutUs } from '../user/AboutUs';
 import { Terms } from '../user/Terms';
 import { BoardLogin } from '../user/BoardLogin';
 import { BoardView } from '../user/BoardView';
+import { AdminLogin } from '../admin/AdminLogin';
+import { AdminHome } from '../admin/AdminHome';
+import { RequireAdmin } from '../auth/RequireAdmin';
 
 export const MainLayout = ({ children }) => {
   const token = useSelector(getToken);
@@ -54,14 +57,29 @@ export const MainLayout = ({ children }) => {
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ms-auto">
-                  {token && (<><Nav.Link href="/dashboard">Dashboard</Nav.Link>
-                    <Nav.Link href="/buildings">View Buildings</Nav.Link>
-                    <Nav.Link href="/building/new">Request New Building</Nav.Link>
-                    {user && (<NavDropdown title={user.name} id="basic-nav-dropdown" align={'end'}>
-                      <NavDropdown.Item href="/my-profile">My ccount</NavDropdown.Item>
-                      <NavDropdown.Divider />
-                      <NavDropdown.Item onClick={onSignOut}>Sign Out</NavDropdown.Item>
-                    </NavDropdown>)}</>)}
+                  {token && user && user.permission == 'manager' && (
+                    <>
+                      <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+                      <Nav.Link href="/buildings">View Buildings</Nav.Link>
+                      <Nav.Link href="/building/new">Request New Building</Nav.Link>
+                      {user && (<NavDropdown title={user.name} id="basic-nav-dropdown" align={'end'}>
+                        <NavDropdown.Item href="/my-profile">My Profile</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item onClick={onSignOut}>Sign Out</NavDropdown.Item>
+                      </NavDropdown>)}
+                    </>)}
+                  {token && user && user.permission == 'admin' && (
+                    <>
+                      <Nav.Link href="/admin/home">Dashboard</Nav.Link>
+                      <Nav.Link href="/admin/buildings">Buildings</Nav.Link>
+                      <Nav.Link href="/admin/new-ticket">Add Ticket</Nav.Link>
+                      <Nav.Link href="/admin/managers">Managers</Nav.Link>
+                      {user && (<NavDropdown title={user.name} id="basic-nav-dropdown" align={'end'}>
+                        <NavDropdown.Item href="/admin/my-profile">My Profile</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item onClick={onSignOut}>Sign Out</NavDropdown.Item>
+                      </NavDropdown>)}
+                    </>)}
                   {!token && (<><Nav.Link href="/login">Login</Nav.Link></>)}
                 </Nav>
               </Navbar.Collapse>
@@ -93,7 +111,6 @@ export const MainLayout = ({ children }) => {
 }
 
 export const MainLayoutRoutes = ({ component: Component, ...rest }) => {
-  console.log('MainLayoutRoute');
   let location = useLocation();
   return (
     <MainLayout>
@@ -101,17 +118,20 @@ export const MainLayoutRoutes = ({ component: Component, ...rest }) => {
         <Route path="*" element={<Navigate to="/home" state={{ from: location }} />} />
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
-        <Route path="/buildings" element={<RequireAuth><Buildings /></RequireAuth>} />
-        <Route path="/building/:building_id" element={<RequireAuth><BuildingDetail /></RequireAuth>} />
-        <Route path="/building/new" element={<RequireAuth><BuildingForm /></RequireAuth>} />
-        <Route path="/ticket/new" element={<RequireAuth><TicketForm /></RequireAuth>} />
-        <Route path="/note/new" element={<RequireAuth><NoteForm /></RequireAuth>} />
+        <Route path="/dashboard" element={<RequireManager><Dashboard /></RequireManager>} />
+        <Route path="/buildings" element={<RequireManager><Buildings /></RequireManager>} />
+        <Route path="/building/:building_id" element={<RequireManager><BuildingDetail /></RequireManager>} />
+        <Route path="/building/new" element={<RequireManager><BuildingForm /></RequireManager>} />
+        <Route path="/ticket/new" element={<RequireManager><TicketForm /></RequireManager>} />
+        <Route path="/note/new" element={<RequireManager><NoteForm /></RequireManager>} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/terms" element={<Terms />} />
 
         <Route path="/board/login" element={<BoardLogin />} />
         <Route path="/board/view/:building_id/:board_token" element={<BoardView />} />
+
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/home" element={<RequireAdmin><AdminHome /></RequireAdmin>} />
       </Routes>
     </MainLayout>
   )

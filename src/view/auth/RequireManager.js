@@ -10,13 +10,13 @@ import {
   getUser
 } from '../../features/user/userSlice';
 
-export function RequireAuth({ children }) {
+export function RequireManager({ children }) {
 
   let location = useLocation();
   const token = useSelector(getToken);
   const user = useSelector(getUser);
 
-  let result = token != null && token != "";
+  let result = token != null && token != "" && user && user.permission == 'manager';
 
   if (!result) {
     return <Navigate to="/login" state={{ from: location }} />;

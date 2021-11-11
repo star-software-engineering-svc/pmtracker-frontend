@@ -8,9 +8,9 @@ import {
   getToken
 } from '../../features/user/userSlice';
 
-import { login } from '../../service/ManagerService';
+import { adminLogin } from '../../service/AdminService';
 
-export function Login() {
+export function AdminLogin() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,12 +32,12 @@ export function Login() {
     }
 
     setValidated(true);
-    login(email, password).then((response) => {
+    adminLogin(email, password).then((response) => {
       console.log(response.data);
       dispatch(setToken(response.data.access_token));
       dispatch(setUser(response.data.user));
 
-      navigate('/dashboard');
+      navigate('/admin/home');
     }).catch((error) => {
       console.log(error.response.status);
       if (error.response.status == 422 || error.response.status == 401) {
@@ -48,7 +48,7 @@ export function Login() {
 
   return (
     <div className="login-container tw-bg-gray-100">
-      <h2>Sign In as <span className="tw-text-green-500">Manager</span></h2>
+      <h2>Sign In as <span className="tw-text-green-500">Administrator</span></h2>
       <Form noValidate onSubmit={handleSubmit} validated={validated}>
         {errorMsg && (<Alert variant={'warning'}>{errorMsg}</Alert>)}
         <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -76,9 +76,9 @@ export function Login() {
           </Button>
         </div>
         <div className="tw-flex tw-flex-row tw-justify-end">
-          <Link to="/admin/login">Sign in as an administrator</Link>
+          <Link to="/login">Sign in as a manager</Link>
         </div>
-      </Form >
-    </div >
+      </Form>
+    </div>
   );
 }
