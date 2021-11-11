@@ -18,6 +18,8 @@ import { TicketForm } from '../user/TicketForm';
 import { NoteForm } from '../user/NoteForm';
 import { AboutUs } from '../user/AboutUs';
 import { Terms } from '../user/Terms';
+import { BoardLogin } from '../user/BoardLogin';
+import { BoardView } from '../user/BoardView';
 
 export const MainLayout = ({ children }) => {
   const token = useSelector(getToken);
@@ -52,14 +54,15 @@ export const MainLayout = ({ children }) => {
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ms-auto">
-                  <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-                  <Nav.Link href="/buildings">View Buildings</Nav.Link>
-                  <Nav.Link href="/building/new">Request New Building</Nav.Link>
-                  {user && (<NavDropdown title={user.name} id="basic-nav-dropdown" align={'end'}>
-                    <NavDropdown.Item href="/my-profile">My ccount</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item onClick={onSignOut}>Sign Out</NavDropdown.Item>
-                  </NavDropdown>)}
+                  {token && (<><Nav.Link href="/dashboard">Dashboard</Nav.Link>
+                    <Nav.Link href="/buildings">View Buildings</Nav.Link>
+                    <Nav.Link href="/building/new">Request New Building</Nav.Link>
+                    {user && (<NavDropdown title={user.name} id="basic-nav-dropdown" align={'end'}>
+                      <NavDropdown.Item href="/my-profile">My ccount</NavDropdown.Item>
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item onClick={onSignOut}>Sign Out</NavDropdown.Item>
+                    </NavDropdown>)}</>)}
+                  {!token && (<><Nav.Link href="/login">Login</Nav.Link></>)}
                 </Nav>
               </Navbar.Collapse>
             </Container>
@@ -106,6 +109,9 @@ export const MainLayoutRoutes = ({ component: Component, ...rest }) => {
         <Route path="/note/new" element={<RequireAuth><NoteForm /></RequireAuth>} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/terms" element={<Terms />} />
+
+        <Route path="/board/login" element={<BoardLogin />} />
+        <Route path="/board/view/:building_id/:board_token" element={<BoardView />} />
       </Routes>
     </MainLayout>
   )

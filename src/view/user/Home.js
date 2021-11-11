@@ -25,7 +25,7 @@ export function Home() {
   }
 
   const onBoardMember = () => {
-
+    navigate("/board/login");
   }
 
   const onAboutUs = () => {

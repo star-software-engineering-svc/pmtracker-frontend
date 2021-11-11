@@ -187,3 +187,19 @@ export function createNote(token, values) {
       }
     });
 }
+
+export function boardLogin(code, password) {
+  return instance.post('board/login',
+    {
+      code, password
+    });
+}
+
+export function getBoardTickets(token, building_id) {
+  return instance.get('board/get-board-tickets', {
+    params: {
+      token,
+      building_id
+    }
+  });
+}

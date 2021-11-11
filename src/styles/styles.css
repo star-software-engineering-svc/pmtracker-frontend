@@ -92,3 +92,9 @@ body {
     overflow-y: auto;
     overflow-x: auto;
 }
+
+.ticket-category-td {
+    padding: 5px;
+    border: 1px solid #9f9f9f;
+    text-align: center;
+}
