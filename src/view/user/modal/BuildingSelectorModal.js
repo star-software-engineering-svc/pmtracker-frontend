@@ -52,7 +52,7 @@ export function BuildingSelectorModal({ show, handleClose, selectBuilding }) {
         </Modal.Header>
         <Modal.Body>
           <div>
-            <div class="tw-flex tw-flex-row tw-justify-end tw-items-center">
+            <div className="tw-flex tw-flex-row tw-justify-end tw-items-center">
               <div>
                 Zip:&nbsp;&nbsp;
               </div>

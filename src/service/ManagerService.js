@@ -178,3 +178,12 @@ export function createTicket(token, values, attachment1, attachment2) {
       }
     });
 }
+
+export function createNote(token, values) {
+  return instance.post('manager/buildings/create-note', values,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+}

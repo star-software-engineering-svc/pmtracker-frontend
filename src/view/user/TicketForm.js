@@ -160,35 +160,35 @@ export function TicketForm() {
                         <div className="tw-font-medium">
                           Building Info
                         </div>
-                        <div class="info-inline">
+                        <div className="info-inline">
                           <div>Building ID</div>
                           <div>{curBuilding.building_id}</div>
                         </div>
-                        <div class="info-inline">
+                        <div className="info-inline">
                           <div>Building Name</div>
                           <div>{curBuilding.name}</div>
                         </div>
-                        <div class="info-inline">
+                        <div className="info-inline">
                           <div>Manager's Name</div>
                           <div>{curBuilding.managers_name}</div>
                         </div>
-                        <div class="info-inline">
+                        <div className="info-inline">
                           <div>Manager's Email</div>
                           <div>{curBuilding.managers_email}</div>
                         </div>
-                        <div class="info-inline">
+                        <div className="info-inline">
                           <div>Code</div>
                           <div>{curBuilding.code}</div>
                         </div>
-                        <div class="info-inline">
+                        <div className="info-inline">
                           <div>Address</div>
                           <div>{curBuilding.address}</div>
                         </div>
-                        <div class="info-inline">
+                        <div className="info-inline">
                           <div>City</div>
                           <div>{curBuilding.city}</div>
                         </div>
-                        <div class="info-inline">
+                        <div className="info-inline">
                           <div>State</div>
                           <div>{curBuilding.state}</div>
                         </div>
@@ -288,28 +288,30 @@ export function TicketForm() {
                         <Form.Control type="file" name="attachment2" onChange={(evt) => setAttachment2(evt.target.files[0])} />
                       </Form.Group>
                     </Col>
+                    <Col md={12}>
+                      <div className="tw-flex tw-flex-column tw-justify-end">
+                        <Form.Group className="tw-mb-3 tw-mr-3" controlId="terms">
+                          <Form.Check
+                            required
+                            name="terms"
+                            label={(<>I've read and agree with the <a href="http://www.google.com">terms and conditions</a></>)}
+                            onChange={handleChange}
+                            defaultChecked={values.terms}
+                            isInvalid={!!errors.terms}
+                            feedback={errors.terms}
+                            feedbackType="invalid"
+                            id="validationFormik1"
+                          />
+                        </Form.Group>
+                      </div>
+                      <div className="tw-flex tw-flex-column tw-justify-end">
+                        <Button type="submit"><i className="fas fa-save"></i>&nbsp; Submit</Button>
+                      </div>
+                    </Col>
                   </Row>
                 </div>
                 <div className="tw-p-2">
                 </div>
-              </div>
-              <div className="tw-flex tw-flex-column tw-justify-end">
-                <Form.Group className="tw-mb-3 tw-mr-3" controlId="terms">
-                  <Form.Check
-                    required
-                    name="terms"
-                    label={(<>I've read and agree with the <a href="http://www.google.com">terms and conditions</a></>)}
-                    onChange={handleChange}
-                    defaultChecked={values.terms}
-                    isInvalid={!!errors.terms}
-                    feedback={errors.terms}
-                    feedbackType="invalid"
-                    id="validationFormik1"
-                  />
-                </Form.Group>
-              </div>
-              <div className="tw-flex tw-flex-column tw-justify-end">
-                <Button type="submit"><i className="fas fa-save"></i>&nbsp; Submit</Button>
               </div>
             </Form>
           )}

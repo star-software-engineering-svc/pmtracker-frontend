@@ -15,6 +15,7 @@ import { Buildings } from '../user/Buildings';
 import { BuildingDetail } from '../user/BuildingDetail';
 import { BuildingForm } from '../user/BuildingForm';
 import { TicketForm } from '../user/TicketForm';
+import { NoteForm } from '../user/NoteForm';
 
 export const MainLayout = ({ children }) => {
   const token = useSelector(getToken);
@@ -100,6 +101,7 @@ export const MainLayoutRoutes = ({ component: Component, ...rest }) => {
         <Route path="/building/:building_id" element={<RequireAuth><BuildingDetail /></RequireAuth>} />
         <Route path="/building/new" element={<RequireAuth><BuildingForm /></RequireAuth>} />
         <Route path="/ticket/new" element={<RequireAuth><TicketForm /></RequireAuth>} />
+        <Route path="/note/new" element={<RequireAuth><NoteForm /></RequireAuth>} />
       </Routes>
     </MainLayout>
   )
