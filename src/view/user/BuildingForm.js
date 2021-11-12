@@ -126,10 +126,11 @@ export function BuildingForm() {
 
   const onCreate = (values, resetForm) => {
     values['more_board_members'] = moreBoardMembers;
-    createBuilding(token, values).then(response => {
+    createBuilding(token, user.permission, values).then(response => {
       const { type, message } = response.data;
       if (type == "S_OK") {
         resetForm();
+        setMoreBoardMembers([]);
       }
 
     }).catch((error) => {
@@ -144,7 +145,7 @@ export function BuildingForm() {
   }
 
   useEffect(() => {
-    getCarriers(token).then(response => {
+    getCarriers(token, user.permission).then(response => {
       const { type, carriers } = response.data;
       setCarriers(carriers);
     }).catch((error) => {

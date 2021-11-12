@@ -76,8 +76,6 @@ export const MainLayout = ({ children }) => {
                       <Nav.Link href="/admin/new-ticket">Add Ticket</Nav.Link>
                       <Nav.Link href="/admin/managers">Managers</Nav.Link>
                       {user && (<NavDropdown title={user.name} id="basic-nav-dropdown" align={'end'}>
-                        <NavDropdown.Item href="/admin/my-profile">My Profile</NavDropdown.Item>
-                        <NavDropdown.Divider />
                         <NavDropdown.Item onClick={onSignOut}>Sign Out</NavDropdown.Item>
                       </NavDropdown>)}
                     </>)}
@@ -134,6 +132,7 @@ export const MainLayoutRoutes = ({ component: Component, ...rest }) => {
 
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/home" element={<RequireAdmin><AdminHome /></RequireAdmin>} />
+        <Route path="/admin/ticket/new" element={<RequireAdmin><TicketForm /></RequireAdmin>} />
       </Routes>
     </MainLayout>
   )

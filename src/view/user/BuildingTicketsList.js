@@ -62,7 +62,7 @@ export function BuildingTicketsList({ building_id }) {
     setTicketDescModalShow(false);
     setInternalNoteModalShow(false);
 
-    getBuildingTickets(token, building_id).then((response) => {
+    getBuildingTickets(token, user.permission, building_id).then((response) => {
       const { tickets } = response.data;
       setTickets(tickets);
     }).catch((error) => {

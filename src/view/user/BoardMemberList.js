@@ -29,7 +29,7 @@ export function BoardMemberList({ building_id }) {
 
   useEffect(() => {
     setLoading(true);
-    getBoardMembers(token, building_id).then((response) => {
+    getBoardMembers(token, user.permission, building_id).then((response) => {
       const { board_members } = response.data;
       setMembers(board_members);
     }).catch((error) => {

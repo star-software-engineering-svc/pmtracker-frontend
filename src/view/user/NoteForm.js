@@ -53,7 +53,7 @@ export function NoteForm() {
 
     values['building_id'] = curBuilding.building_id;
 
-    createNote(token, values).then(response => {
+    createNote(token, user.permission, values).then(response => {
       const { type, message } = response.data;
       setCurBuilding({});
       resetForm();

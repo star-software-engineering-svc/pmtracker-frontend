@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Modal, Button, Form } from 'react-bootstrap';
-import { getToken, setToken, setUser } from '../../../features/user/userSlice';
+import { getToken, setToken, getUser, setUser } from '../../../features/user/userSlice';
 
 import { warning } from '../../helper/snack';
 import { addInternalNote } from '../../../service/ManagerService';
@@ -11,6 +11,7 @@ export function InternalNoteModal({ shown, handleClose, ticket, onSuccess }) {
 
   const dispatch = useDispatch();
   const token = useSelector(getToken);
+  const user = useSelector(getUser);
 
   const [message, setMessage] = useState("");
   const onChangeMessage = (event) => {
@@ -23,7 +24,7 @@ export function InternalNoteModal({ shown, handleClose, ticket, onSuccess }) {
   }
 
   const onSave = () => {
-    addInternalNote(token, ticket.ticket_id, cost, message).then(response => {
+    addInternalNote(token, user.permission, ticket.ticket_id, cost, message).then(response => {
       const { type } = response.data;
       if (type == "S_OK") {
         onSuccess();

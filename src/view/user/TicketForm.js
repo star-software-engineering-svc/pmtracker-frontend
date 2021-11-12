@@ -67,7 +67,7 @@ export function TicketForm() {
 
     values['building_id'] = curBuilding.building_id;
 
-    createTicket(token, values, attachment1, attachment2).then(response => {
+    createTicket(token, user.permission, values, attachment1, attachment2).then(response => {
       const { type, message } = response.data;
       setCurBuilding({});
       resetForm();
@@ -97,7 +97,7 @@ export function TicketForm() {
   }
 
   useEffect(() => {
-    getTicketCategories(token, "", "").then(response => {
+    getTicketCategories(token, user.permission).then(response => {
       const { type, categories } = response.data;
       setTicketCategories(categories);
     }).catch((error) => {
