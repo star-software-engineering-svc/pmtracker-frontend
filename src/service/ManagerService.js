@@ -7,16 +7,14 @@ export function login(email, password) {
   });
 }
 
-export function getBuildings(token, permission/*, page, perPage, sortCol, sortDir*/) {
+export function getBuildings(token, permission, page, perPage, sortCol, sortDir) {
   return instance.get('manager/buildings/get-buildings', {
     params: {
       permission: permission,
-      /*
       page: page,
       perPage: perPage,
       sortCol: sortCol,
       sortDir: sortDir
-      */
     },
     headers: {
       'Authorization': `Bearer ${token}`
