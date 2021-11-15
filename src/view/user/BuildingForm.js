@@ -74,7 +74,7 @@ export function BuildingForm() {
       supers_cell: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
       board_m_phone: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
       password: yup.string(),
-      repassword: yup.string().oneOf([yup.ref('bpwd'), null], 'Passwords must match'),
+      repassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
       manager_id: yup.string().required(),
     });
 
@@ -177,11 +177,11 @@ export function BuildingForm() {
         }
       });
     }
+    building['terms'] = true;
 
     if (building_id != null) {
       getBuilding(token, user.permission, building_id).then(response => {
         const { type, building, board_members } = response.data;
-        building['terms'] = true;
         setBuilding(building);
         setMoreBoardMembers(board_members);
       }).catch((error) => {
@@ -439,14 +439,14 @@ export function BuildingForm() {
                       <Form.Group className="mb-3" controlId="password">
                         <Form.Label>Password<span className="tw-text-red-500">*</span></Form.Label>
                         <Form.Control type="text" name="password" value={values.password} isInvalid={!!errors.password} onChange={handleChange} />
-                        <Form.Control.Feedback type="invalid">{errors.bpwd}</Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                       </Form.Group>
                     </Col>
                     <Col md={6}>
                       <Form.Group className="mb-3" controlId="repassword">
                         <Form.Label>Retype Password<span className="tw-text-red-500">*</span></Form.Label>
                         <Form.Control type="text" name="repassword" value={values.repassword} isInvalid={!!errors.repassword} onChange={handleChange} />
-                        <Form.Control.Feedback type="invalid">{errors.rebpwd}</Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">{errors.repassword}</Form.Control.Feedback>
                       </Form.Group>
                     </Col>
                     <Col md={12}>
@@ -517,12 +517,11 @@ export function BuildingForm() {
                     name="terms"
                     label={(<>I've read and agree with the <Link to="/terms">terms and conditions</Link></>)}
                     onChange={handleChange}
-                    defaultChecked={true}
-                    checked={values.terms}
+                    defaultChecked={values.terms}
                     isInvalid={!!errors.terms}
                     feedback={errors.terms}
                     feedbackType="invalid"
-                    id="terms"
+                    id="validationFormik1"
                   />
                 </Form.Group>
               </div>

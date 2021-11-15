@@ -25,6 +25,8 @@ import { AdminHome } from '../admin/AdminHome';
 import { RequireAdmin } from '../auth/RequireAdmin';
 import { ManagerProfile } from '../user/ManagerProfile';
 import { AdminBuildings } from '../admin/AdminBuildings';
+import { AdminManagers } from '../admin/AdminManagers';
+import { ManagerForm } from '../user/ManagerForm';
 
 export const MainLayout = ({ children }) => {
   const token = useSelector(getToken);
@@ -137,6 +139,9 @@ export const MainLayoutRoutes = ({ component: Component, ...rest }) => {
         <Route path="/admin/buildings" element={<RequireAdmin><AdminBuildings /></RequireAdmin>} />
         <Route path="/admin/building/new" element={<RequireAdmin><BuildingForm /></RequireAdmin>} />
         <Route path="/admin/building/edit/:building_id" element={<RequireAdmin><BuildingForm /></RequireAdmin>} />
+        <Route path="/admin/managers" element={<RequireAdmin><AdminManagers /></RequireAdmin>} />
+        <Route path="/admin/manager/new" element={<RequireAdmin><ManagerForm /></RequireAdmin>} />
+        <Route path="/admin/manager/edit/:manager_id" element={<RequireAdmin><ManagerForm /></RequireAdmin>} />
       </Routes>
     </MainLayout>
   )

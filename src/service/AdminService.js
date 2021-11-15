@@ -7,6 +7,18 @@ export function adminLogin(email, password) {
   });
 }
 
+export function getManager(token, permission, manager_id) {
+  return instance.get('admin/manager/get-manager', {
+    params: {
+      permission: permission,
+      manager_id: manager_id
+    },
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+}
+
 export function getManagerList(token, permission) {
   return instance.get('admin/manager/get-manager-list', {
     params: {
@@ -35,6 +47,28 @@ export function deleteBuilding(token, permission, building_id) {
   return instance.post('admin/buildings/delete-building', {
     permission: permission,
     building_id: building_id
+  },
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+}
+
+export function saveManager(token, permission, values) {
+  values['permission'] = permission;
+  return instance.post('admin/manager/save-manager', values,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+}
+
+export function deleteManager(token, permission, manager_id) {
+  return instance.post('admin/manager/delete-manager', {
+    permission: permission,
+    manager_id: manager_id
   },
     {
       headers: {
