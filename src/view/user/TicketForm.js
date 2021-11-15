@@ -71,6 +71,8 @@ export function TicketForm() {
       const { type, message } = response.data;
       setCurBuilding({});
       resetForm();
+      document.getElementById("attachment1").value = '';
+      document.getElementById("attachment2").value = '';
     }).catch((error) => {
       const { status, data } = error.response;
       if (status == 401) {
@@ -134,7 +136,9 @@ export function TicketForm() {
             resident_email2: '',
             description: '',
             receive_note: false,
-            terms: true
+            terms: true,
+            attachment1: '',
+            attachment2: ''
           }}
         >
           {({
@@ -277,13 +281,13 @@ export function TicketForm() {
                       </Form.Group>
                     </Col>
                     <Col md={6}>
-                      <Form.Group controlId="formFile" className="mb-3">
+                      <Form.Group controlId="attachment1" className="mb-3" controlId="attachment1">
                         <Form.Label>Attachment 1</Form.Label>
                         <Form.Control type="file" name="attachment1" onChange={(evt) => setAttachment1(evt.target.files[0])} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
-                      <Form.Group controlId="formFile" className="mb-3">
+                      <Form.Group controlId="attachment2" className="mb-3" controlId="attachment2">
                         <Form.Label>Attachment 2</Form.Label>
                         <Form.Control type="file" name="attachment2" onChange={(evt) => setAttachment2(evt.target.files[0])} />
                       </Form.Group>
