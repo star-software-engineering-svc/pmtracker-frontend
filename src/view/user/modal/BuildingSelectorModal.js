@@ -26,7 +26,7 @@ export function BuildingSelectorModal({ show, handleClose, selectBuilding }) {
   }
 
   const loadBulidings = () => {
-    filterBuildings(token, zip, keyword, 30).then(response => {
+    filterBuildings(token, user.permission, zip, keyword, 30).then(response => {
       const { type, buildings } = response.data;
       setBuildings(buildings);
     }).catch((error) => {

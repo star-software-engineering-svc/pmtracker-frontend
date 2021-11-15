@@ -32,7 +32,7 @@ export function BuildingDetail() {
   });
 
   useEffect(() => {
-    getBuilding(token, building_id).then((response) => {
+    getBuilding(token, user.permission, building_id).then((response) => {
       const { data } = response;
       setBinfo(data);
     }).catch((error) => {

@@ -7,15 +7,14 @@ export function login(email, password) {
   });
 }
 
-export function getBuildings(token/*, page, perPage, sortCol, sortDir*/) {
+export function getBuildings(token, permission, page, perPage, sortCol, sortDir) {
   return instance.get('manager/buildings/get-buildings', {
     params: {
-      /*
+      permission: permission,
       page: page,
       perPage: perPage,
       sortCol: sortCol,
       sortDir: sortDir
-      */
     },
     headers: {
       'Authorization': `Bearer ${token}`
@@ -23,9 +22,10 @@ export function getBuildings(token/*, page, perPage, sortCol, sortDir*/) {
   });
 }
 
-export function getBuilding(token, building_id) {
+export function getBuilding(token, permission, building_id) {
   return instance.get('manager/buildings/building', {
     params: {
+      permission: permission,
       building_id: building_id
     },
     headers: {
@@ -34,9 +34,10 @@ export function getBuilding(token, building_id) {
   });
 }
 
-export function getBoardMembers(token, building_id) {
+export function getBoardMembers(token, permission, building_id) {
   return instance.get('manager/buildings/board-members', {
     params: {
+      permission: permission,
       building_id: building_id
     },
     headers: {
@@ -45,9 +46,10 @@ export function getBoardMembers(token, building_id) {
   });
 }
 
-export function getBuildingTickets(token, building_id) {
+export function getBuildingTickets(token, permission, building_id) {
   return instance.get('manager/buildings/building-tickets', {
     params: {
+      permission: permission,
       building_id: building_id
     },
     headers: {
@@ -56,8 +58,9 @@ export function getBuildingTickets(token, building_id) {
   });
 }
 
-export function updateTicketStatus(token, ticket_id, ticket_status) {
+export function updateTicketStatus(token, permission, ticket_id, ticket_status) {
   return instance.post('manager/buildings/update-ticket-status', {
+    permission: permission,
     ticket_id: ticket_id,
     ticket_status: ticket_status
   },
@@ -68,8 +71,9 @@ export function updateTicketStatus(token, ticket_id, ticket_status) {
     });
 }
 
-export function notifySuper(token, ticket_id, message) {
+export function notifySuper(token, permission, ticket_id, message) {
   return instance.post('manager/buildings/notify-super', {
+    permission: permission,
     ticket_id: ticket_id,
     message: message
   },
@@ -80,8 +84,9 @@ export function notifySuper(token, ticket_id, message) {
     });
 }
 
-export function updateTicketDesc(token, ticket_id, message) {
+export function updateTicketDesc(token, permission, ticket_id, message) {
   return instance.post('manager/buildings/update-ticket-desc', {
+    permission: permission,
     ticket_id: ticket_id,
     message: message
   },
@@ -92,7 +97,8 @@ export function updateTicketDesc(token, ticket_id, message) {
     });
 }
 
-export function createBuilding(token, values) {
+export function createBuilding(token, permission, values) {
+  values['permission'] = permission;
   return instance.post('manager/buildings/create-building', values,
     {
       headers: {
@@ -101,8 +107,9 @@ export function createBuilding(token, values) {
     });
 }
 
-export function addInternalNote(token, ticket_id, cost, message) {
+export function addInternalNote(token, permission, ticket_id, cost, message) {
   return instance.post('manager/internal-note/add-note', {
+    permission: permission,
     ticket_id: ticket_id,
     cost: cost,
     message: message
@@ -114,9 +121,10 @@ export function addInternalNote(token, ticket_id, cost, message) {
     });
 }
 
-export function getInternalNotes(token, building_id) {
+export function getInternalNotes(token, permission, building_id) {
   return instance.get('manager/internal-note/get-note-list', {
     params: {
+      permission: permission,
       building_id: building_id
     },
     headers: {
@@ -125,9 +133,10 @@ export function getInternalNotes(token, building_id) {
   });
 }
 
-export function getCarriers(token) {
+export function getCarriers(token, permission) {
   return instance.get('manager/carrier/get-carrier-list', {
     params: {
+      permission: permission
     },
     headers: {
       'Authorization': `Bearer ${token}`
@@ -135,9 +144,10 @@ export function getCarriers(token) {
   });
 }
 
-export function getTicketCategories(token) {
+export function getTicketCategories(token, permission) {
   return instance.get('manager/ticket/get-ticket-categories', {
     params: {
+      permission: permission
     },
     headers: {
       'Authorization': `Bearer ${token}`
@@ -145,12 +155,13 @@ export function getTicketCategories(token) {
   });
 }
 
-export function filterBuildings(token, zip, keyword, limit) {
+export function filterBuildings(token, permission, zip, keyword, limit) {
   return instance.get('manager/buildings/filter-buildings', {
     params: {
       zip: zip,
       keyword: keyword,
-      limit: 30
+      limit: limit,
+      permission: permission
     },
     headers: {
       'Authorization': `Bearer ${token}`
@@ -158,12 +169,14 @@ export function filterBuildings(token, zip, keyword, limit) {
   });
 }
 
-export function createTicket(token, values, attachment1, attachment2) {
+export function createTicket(token, permission, values, attachment1, attachment2) {
 
   const formData = new FormData();
   for (const prop in values) {
     formData.append(prop, values[prop]);
   }
+
+  formData.append('permission', permission);
 
   if (attachment1)
     formData.append("attachment1", attachment1, attachment1.name);
@@ -179,7 +192,8 @@ export function createTicket(token, values, attachment1, attachment2) {
     });
 }
 
-export function createNote(token, values) {
+export function createNote(token, permission, values) {
+  values['permission'] = permission;
   return instance.post('manager/buildings/create-note', values,
     {
       headers: {
@@ -204,7 +218,8 @@ export function getBoardTickets(token, building_id) {
   });
 }
 
-export function updateProfile(token, values) {
+export function updateProfile(token, permission, values) {
+  values['permission'] = permission;
   return instance.post('manager/update-profile', values,
     {
       headers: {

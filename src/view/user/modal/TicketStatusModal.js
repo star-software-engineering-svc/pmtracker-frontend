@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { Modal, Button, Form } from 'react-bootstrap';
 import { updateTicketStatus } from '../../../service/ManagerService';
-import { getToken, setToken, setUser } from '../../../features/user/userSlice';
+import { getToken, setToken, getUser, setUser } from '../../../features/user/userSlice';
 
 import { warning } from '../../helper/snack';
 
@@ -11,13 +11,14 @@ export function TicketStatusModal({ shown, handleClose, ticket, onSuccess }) {
 
   const dispatch = useDispatch();
   const token = useSelector(getToken);
+  const user = useSelector(getUser);
 
   const [status, setStatus] = useState(ticket.ticket_status_id);
   const onChangeStatus = (event) => {
     setStatus(event.target.value);
   }
   const onUpdateStatus = () => {
-    updateTicketStatus(token, ticket.ticket_id, status).then(response => {
+    updateTicketStatus(token, user.permission, ticket.ticket_id, status).then(response => {
       console.log(response);
       const { type } = response.data;
       if (type == "S_OK") {

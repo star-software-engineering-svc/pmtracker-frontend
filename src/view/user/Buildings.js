@@ -34,7 +34,7 @@ export function Buildings() {
   const fetchBuildings = () => {
     setLoading(true);
 
-    getBuildings(token/*, page, perPage, sortCol, sortDir*/).then((response) => {
+    getBuildings(token, user.permission/*, page, perPage, sortCol, sortDir*/).then((response) => {
       console.log(response.data);
       const { result } = response.data;
       setData(result);

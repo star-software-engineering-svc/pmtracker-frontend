@@ -47,7 +47,7 @@ export function ManagerProfile() {
 
   const onCreate = (values, resetForm) => {
 
-    updateProfile(token, values).then(response => {
+    updateProfile(token, user.permission, values).then(response => {
       const { type, new_user_info, message } = response.data;
       if (type == "S_OK") {
         dispatch(setUser(new_user_info));
@@ -67,7 +67,7 @@ export function ManagerProfile() {
   }
 
   useEffect(() => {
-    getCarriers(token).then(response => {
+    getCarriers(token, user.permission).then(response => {
       const { type, carriers } = response.data;
       setCarriers(carriers);
     }).catch((error) => {

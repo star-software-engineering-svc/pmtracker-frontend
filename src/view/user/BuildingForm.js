@@ -12,33 +12,21 @@ import { Button, Form, Row, Col, Table, InputGroup } from 'react-bootstrap';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-import { getCarriers, createBuilding } from '../../service/ManagerService';
+import { getCarriers, createBuilding, getBuilding } from '../../service/ManagerService';
 import { info, warning } from '../helper/snack';
 
 import * as yup from 'yup';
 import { Formik } from 'formik';
+import { getManagerList } from '../../service/AdminService';
 
 
 const phoneRegExp = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
-const schema = yup.object().shape({
-  name: yup.string().required(),
-  address: yup.string().required(),
-  city: yup.string().required(),
-  zip: yup.string().required(),
-  terms: yup.bool().required().oneOf([true, 1, 'checked'], 'Terms must be accepted'),
-  board_m_name: yup.string().required(),
-  board_m_email: yup.string().email().required(),
-  phone: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
-  supers_cell: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
-  board_m_phone: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
-  bpwd: yup.string().required("Password is required."),
-  rebpwd: yup.string().oneOf([yup.ref('bpwd'), null], 'Passwords must match')
-});
-
 
 export function BuildingForm() {
 
   let { building_id } = useParams();
+
+  console.log(building_id);
 
   const dispatch = useDispatch();
   const token = useSelector(getToken);
@@ -55,6 +43,41 @@ export function BuildingForm() {
   const [more_bname_valid, setMoreBnameValid] = useState(false);
   const [more_bemail_valid, setMoreBemailValid] = useState(false);
 
+  const [managers, setManagers] = useState([]);
+  const [building, setBuilding] = useState({});
+
+  let schema = yup.object().shape({
+    name: yup.string().required(),
+    address: yup.string().required(),
+    city: yup.string().required(),
+    zip: yup.string().required(),
+    terms: yup.bool().required().oneOf([true, 1, 'checked', 'on'], 'Terms must be accepted'),
+    board_m_name: yup.string().required(),
+    board_m_email: yup.string().email().required(),
+    phone: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+    supers_cell: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+    board_m_phone: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+    bpwd: yup.string().required("Password is required."),
+    rebpwd: yup.string().oneOf([yup.ref('bpwd'), null], 'Passwords must match')
+  });
+
+  if (user.permission == "admin")
+    schema = yup.object().shape({
+      name: yup.string().required(),
+      address: yup.string().required(),
+      city: yup.string().required(),
+      zip: yup.string().required(),
+      terms: yup.bool().required().oneOf([true, 1, 'checked', 'on'], 'Terms must be accepted'),
+      board_m_name: yup.string().required(),
+      board_m_email: yup.string().email().required(),
+      phone: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+      supers_cell: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+      board_m_phone: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+      password: yup.string(),
+      repassword: yup.string().oneOf([yup.ref('bpwd'), null], 'Passwords must match'),
+      manager_id: yup.string().required(),
+    });
+
   const onAddBoardMember = () => {
 
     const sch = yup.object().shape({
@@ -67,9 +90,9 @@ export function BuildingForm() {
     let result = sch.validate({ name: moreBoardMName, email: moreBoardMEmail }, { abortEarly: false }).then(valid => {
       console.log(valid);
       let result = {
-        board_m_name: moreBoardMName,
-        board_m_email: moreBoardMEmail,
-        board_m_em_alert: moreBoardMEmailAlert
+        name: moreBoardMName,
+        email: moreBoardMEmail,
+        email_alerts: moreBoardMEmailAlert
       };
 
       const found = moreBoardMembers.find(element => element.board_m_email == moreBoardMEmail);
@@ -95,29 +118,6 @@ export function BuildingForm() {
   };
 
   const onDeleteMoreBM = (index) => {
-    /*
-    console.log(index);
-    confirmAlert({
-      title: 'Confirm',
-      message: 'Are you sure to delete?',
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: () => {
-            let result = moreBoardMembers.filter((bm, idx) => {
-              return index != idx;
-            });
-
-            setMoreBoardMembers(result);
-          }
-        },
-        {
-          label: 'No',
-          onClick: () => { }
-        }
-      ]
-    });
-    */
     let result = moreBoardMembers.filter((bm, idx) => {
       return index != idx;
     });
@@ -126,10 +126,16 @@ export function BuildingForm() {
 
   const onCreate = (values, resetForm) => {
     values['more_board_members'] = moreBoardMembers;
-    createBuilding(token, values).then(response => {
+    createBuilding(token, user.permission, values).then(response => {
       const { type, message } = response.data;
       if (type == "S_OK") {
-        resetForm();
+        if (building_id) {
+          info("The building info is updated successfully.");
+        } else {
+          resetForm();
+          setMoreBoardMembers([]);
+          info("A new building is created successfully.");
+        }
       }
 
     }).catch((error) => {
@@ -144,7 +150,7 @@ export function BuildingForm() {
   }
 
   useEffect(() => {
-    getCarriers(token).then(response => {
+    getCarriers(token, user.permission).then(response => {
       const { type, carriers } = response.data;
       setCarriers(carriers);
     }).catch((error) => {
@@ -156,6 +162,38 @@ export function BuildingForm() {
         warning(data.message);
       }
     });
+
+    if (user.permission == 'admin') {
+      getManagerList(token, user.permission).then(response => {
+        const { type, managers } = response.data;
+        setManagers(managers);
+      }).catch((error) => {
+        const { status, data } = error.response;
+        if (status == 401) {
+          dispatch(setToken(null));
+          dispatch(setUser(null));
+        } else {
+          warning(data.message);
+        }
+      });
+    }
+
+    if (building_id != null) {
+      getBuilding(token, user.permission, building_id).then(response => {
+        const { type, building, board_members } = response.data;
+        building['terms'] = true;
+        setBuilding(building);
+        setMoreBoardMembers(board_members);
+      }).catch((error) => {
+        const { status, data } = error.response;
+        if (status == 401) {
+          dispatch(setToken(null));
+          dispatch(setUser(null));
+        } else {
+          warning(data.message);
+        }
+      });
+    }
   }, []);
 
   return (
@@ -166,24 +204,12 @@ export function BuildingForm() {
         </div>
 
         <Formik
+          enableReinitialize={true}
           validationSchema={schema}
           onSubmit={(values, { setSubmitting, resetForm }) => {
             onCreate(values, resetForm);
           }}
-          initialValues={{
-            name: '',
-            address: '',
-            city: '',
-            zip: '',
-            terms: true,
-            board_m_name: '',
-            board_m_email: '',
-            phone: '',
-            supers_cell: '',
-            board_m_phone: '',
-            bpwd: '',
-            rebpwd: ''
-          }}
+          initialValues={building}
         >
           {({
             handleSubmit,
@@ -204,6 +230,7 @@ export function BuildingForm() {
                       </div>
                     </Col>
                     <Col md={6}>
+                      <Form.Control type="hidden" name="building_id" value={values.building_id} />
                       <Form.Group className="mb-3" controlId="name">
                         <Form.Label>Name<span className="tw-text-red-500">*</span></Form.Label>
                         <Form.Control type="text" name="name" isInvalid={!!errors.name} value={values.name} onChange={handleChange} />
@@ -232,7 +259,7 @@ export function BuildingForm() {
                     <Col md={4}>
                       <Form.Group className="mb-3" controlId="state">
                         <Form.Label>State</Form.Label>
-                        <Form.Select aria-label="" onChange={handleChange}>
+                        <Form.Select aria-label="" name="state" value={values.state} onChange={handleChange}>
                           <option value=""></option>
                           <option value="AL">Alabama</option>
                           <option value="AK">Alaska</option>
@@ -298,7 +325,7 @@ export function BuildingForm() {
                     <Col md={6}>
                       <Form.Group className="mb-3" controlId="building_type">
                         <Form.Label>Building Type</Form.Label>
-                        <Form.Select aria-label="" onChange={handleChange}>
+                        <Form.Select aria-label="" name="type" value={values.type} onChange={handleChange}>
                           <option value=""></option>
                           <option value="Coop">Coop</option>
                           <option value="Condo">Condo</option>
@@ -306,10 +333,22 @@ export function BuildingForm() {
                         </Form.Select>
                       </Form.Group>
                     </Col>
+                    {
+                      user.permission && (<Col md={6}>
+                        <Form.Group className="mb-3" controlId="manager_id">
+                          <Form.Label>Manager</Form.Label>
+                          <Form.Select aria-label="" name="manager_id" isInvalid={!!errors.manager_id} value={values.manager_id} onChange={handleChange}>
+                            <option value=""></option>
+                            {managers.map(m => (<option key={m.id} value={m.id}>{m.name}</option>))
+                            }
+                          </Form.Select>
+                        </Form.Group>
+                      </Col>
+                      )}
                     <Col md={6}>
-                      <Form.Group className="mb-3" controlId="num_of_units">
+                      <Form.Group className="mb-3" controlId="number_of_units">
                         <Form.Label>Number of Units</Form.Label>
-                        <Form.Control type="text" name="num_of_units" value={values.num_of_units} onChange={handleChange} />
+                        <Form.Control type="text" name="number_of_units" value={values.number_of_units} onChange={handleChange} />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
@@ -318,13 +357,14 @@ export function BuildingForm() {
                         id="multiple_addresses"
                         label="Does building have multiple addresses?"
                         name="multiple_addresses"
+                        checked={values.multiple_addresses}
                         onChange={handleChange}
                       />
                     </Col>
                     <Col md={12}>
                       <Form.Group className="mb-3" controlId="building_note">
                         <Form.Label>Additional / Building Notes</Form.Label>
-                        <Form.Control as="textarea" name="building_notes" onChange={handleChange} />
+                        <Form.Control as="textarea" name="building_notes" value={values.building_notes} onChange={handleChange} />
                       </Form.Group>
                     </Col>
                   </Row>
@@ -337,13 +377,13 @@ export function BuildingForm() {
                     <Col md={6}>
                       <Form.Group className="mb-3" controlId="supers_name">
                         <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" name="supers_name" onChange={handleChange} />
+                        <Form.Control type="text" name="supers_name" value={values.supers_name} onChange={handleChange} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
                       <Form.Group className="mb-3" controlId="supers_email">
                         <Form.Label>Email</Form.Label>
-                        <Form.Control type="text" name="supers_email" onChange={handleChange} />
+                        <Form.Control type="text" name="supers_email" value={values.supers_email} onChange={handleChange} />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -358,7 +398,7 @@ export function BuildingForm() {
                     <Col md={6}>
                       <Form.Group className="mb-3" controlId="carrier_id">
                         <Form.Label>Carrier</Form.Label>
-                        <Form.Select aria-label="" name="carrier_id" onChange={handleChange}>
+                        <Form.Select aria-label="" name="carrier_id" value={values.carrier_id} onChange={handleChange}>
                           <option value=""></option>
                           {carriers.map(c => {
                             return (<option key={c.carrier_id} value={c.carrier_id}>{c.name}</option>);
@@ -398,14 +438,14 @@ export function BuildingForm() {
                     <Col md={6}>
                       <Form.Group className="mb-3" controlId="password">
                         <Form.Label>Password<span className="tw-text-red-500">*</span></Form.Label>
-                        <Form.Control type="password" name="bpwd" value={values.bpwd} isInvalid={!!errors.bpwd} onChange={handleChange} />
+                        <Form.Control type="text" name="password" value={values.password} isInvalid={!!errors.password} onChange={handleChange} />
                         <Form.Control.Feedback type="invalid">{errors.bpwd}</Form.Control.Feedback>
                       </Form.Group>
                     </Col>
                     <Col md={6}>
                       <Form.Group className="mb-3" controlId="repassword">
                         <Form.Label>Retype Password<span className="tw-text-red-500">*</span></Form.Label>
-                        <Form.Control type="password" name="rebpwd" value={values.rebpwd} isInvalid={!!errors.rebpwd} onChange={handleChange} />
+                        <Form.Control type="text" name="repassword" value={values.repassword} isInvalid={!!errors.repassword} onChange={handleChange} />
                         <Form.Control.Feedback type="invalid">{errors.rebpwd}</Form.Control.Feedback>
                       </Form.Group>
                     </Col>
@@ -437,49 +477,52 @@ export function BuildingForm() {
                       <Button onClick={onAddBoardMember}><i className="fas fa-plus"></i>&nbsp; Add</Button>
                     </div>
                     <div className="tw-p-2">
-                      <Table striped bordered hover>
-                        <thead>
-                          <tr>
-                            <th>#	</th>
-                            <th>Name	</th>
-                            <th>Email</th>
-                            <th>Alerts</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {
-                            moreBoardMembers.map((bm, index) => {
-                              return (
-                                <tr key={index}>
-                                  <td>{index + 1}</td>
-                                  <td>{bm.board_m_name}</td>
-                                  <td>{bm.board_m_email}</td>
-                                  <td>{bm.board_m_em_alert ? 'Yes' : 'No'}</td>
-                                  <td>
-                                    <Button variant="danger" size="sm" onClick={() => { onDeleteMoreBM(index) }}>Delete</Button>
-                                  </td>
-                                </tr>);
-                            })
-                          }
-                        </tbody>
-                      </Table>
+                      <div className="tw-overflow-auto">
+                        <Table striped bordered hover>
+                          <thead>
+                            <tr>
+                              <th>#	</th>
+                              <th>Name	</th>
+                              <th>Email</th>
+                              <th>Alerts</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              moreBoardMembers.map((bm, index) => {
+                                return (
+                                  <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>{bm.name}</td>
+                                    <td>{bm.email}</td>
+                                    <td>{bm.email_alerts ? 'Yes' : 'No'}</td>
+                                    <td>
+                                      <Button variant="danger" size="sm" onClick={() => { onDeleteMoreBM(index) }}>Delete</Button>
+                                    </td>
+                                  </tr>);
+                              })
+                            }
+                          </tbody>
+                        </Table>
+                      </div>
                     </div>
                   </Row>
                 </div>
               </div>
               <div className="tw-flex tw-flex-column tw-justify-end">
-                <Form.Group className="tw-mb-3 tw-mr-3" controlId="terms">
+                <Form.Group className="tw-mb-3 tw-mr-3">
                   <Form.Check
                     required
                     name="terms"
                     label={(<>I've read and agree with the <Link to="/terms">terms and conditions</Link></>)}
                     onChange={handleChange}
-                    defaultChecked={values.terms}
+                    defaultChecked={true}
+                    checked={values.terms}
                     isInvalid={!!errors.terms}
                     feedback={errors.terms}
                     feedbackType="invalid"
-                    id="validationFormik0"
+                    id="terms"
                   />
                 </Form.Group>
               </div>

@@ -24,6 +24,7 @@ import { AdminLogin } from '../admin/AdminLogin';
 import { AdminHome } from '../admin/AdminHome';
 import { RequireAdmin } from '../auth/RequireAdmin';
 import { ManagerProfile } from '../user/ManagerProfile';
+import { AdminBuildings } from '../admin/AdminBuildings';
 
 export const MainLayout = ({ children }) => {
   const token = useSelector(getToken);
@@ -73,11 +74,9 @@ export const MainLayout = ({ children }) => {
                     <>
                       <Nav.Link href="/admin/home">Dashboard</Nav.Link>
                       <Nav.Link href="/admin/buildings">Buildings</Nav.Link>
-                      <Nav.Link href="/admin/new-ticket">Add Ticket</Nav.Link>
+                      <Nav.Link href="/admin/ticket/new">Add Ticket</Nav.Link>
                       <Nav.Link href="/admin/managers">Managers</Nav.Link>
                       {user && (<NavDropdown title={user.name} id="basic-nav-dropdown" align={'end'}>
-                        <NavDropdown.Item href="/admin/my-profile">My Profile</NavDropdown.Item>
-                        <NavDropdown.Divider />
                         <NavDropdown.Item onClick={onSignOut}>Sign Out</NavDropdown.Item>
                       </NavDropdown>)}
                     </>)}
@@ -134,6 +133,10 @@ export const MainLayoutRoutes = ({ component: Component, ...rest }) => {
 
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/home" element={<RequireAdmin><AdminHome /></RequireAdmin>} />
+        <Route path="/admin/ticket/new" element={<RequireAdmin><TicketForm /></RequireAdmin>} />
+        <Route path="/admin/buildings" element={<RequireAdmin><AdminBuildings /></RequireAdmin>} />
+        <Route path="/admin/building/new" element={<RequireAdmin><BuildingForm /></RequireAdmin>} />
+        <Route path="/admin/building/edit/:building_id" element={<RequireAdmin><BuildingForm /></RequireAdmin>} />
       </Routes>
     </MainLayout>
   )
