@@ -33,11 +33,13 @@ export function BuildingForm() {
   const user = useSelector(getUser);
   const navigate = useNavigate();
 
+  /*
   const [moreBoardMName, setMoreBoardMName] = useState('');
   const [moreBoardMEmail, setMoreBoardMEmail] = useState('');
   const [moreBoardMEmailAlert, setMoreBoardMEmailAlert] = useState(false);
 
   const [moreBoardMembers, setMoreBoardMembers] = useState([]);
+  */
   const [carriers, setCarriers] = useState([]);
 
   const [more_bname_valid, setMoreBnameValid] = useState(false);
@@ -57,8 +59,8 @@ export function BuildingForm() {
     phone: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
     supers_cell: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
     board_m_phone: yup.string().matches(phoneRegExp, 'Phone number is not valid'),
-    bpwd: yup.string().required("Password is required."),
-    rebpwd: yup.string().oneOf([yup.ref('bpwd'), null], 'Passwords must match')
+    password: yup.string(),
+    repassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
   });
 
   if (user.permission == "admin")
@@ -78,62 +80,69 @@ export function BuildingForm() {
       manager_id: yup.string().required(),
     });
 
-  const onAddBoardMember = () => {
+  /*
+const onAddBoardMember = () => {
 
-    const sch = yup.object().shape({
-      name: yup.string().required(),
-      email: yup.string().email().required()
-    });
-    setMoreBnameValid(false);
-    setMoreBemailValid(false);
+  const sch = yup.object().shape({
+    name: yup.string().required(),
+    email: yup.string().email().required()
+  });
+  setMoreBnameValid(false);
+  setMoreBemailValid(false);
 
-    let result = sch.validate({ name: moreBoardMName, email: moreBoardMEmail }, { abortEarly: false }).then(valid => {
-      console.log(valid);
-      let result = {
-        name: moreBoardMName,
-        email: moreBoardMEmail,
-        email_alerts: moreBoardMEmailAlert
-      };
+  let result = sch.validate({ name: moreBoardMName, email: moreBoardMEmail }, { abortEarly: false }).then(valid => {
+    console.log(valid);
+    let result = {
+      name: moreBoardMName,
+      email: moreBoardMEmail,
+      email_alerts: moreBoardMEmailAlert
+    };
 
-      const found = moreBoardMembers.find(element => element.board_m_email == moreBoardMEmail);
-      if (found) {
-        info("The email is already added.");
-        return;
-      }
+    const found = moreBoardMembers.find(element => element.board_m_email == moreBoardMEmail);
+    if (found) {
+      info("The email is already added.");
+      return;
+    }
 
-      setMoreBoardMembers([...moreBoardMembers, result]);
+    setMoreBoardMembers([...moreBoardMembers, result]);
 
-      setMoreBoardMName('');
-      setMoreBoardMEmail('');
-      setMoreBoardMEmailAlert(false);
-    }).catch((err, d) => {
-      console.log(err.errors, err.path, err.value);
-      if (err.errors[0].indexOf("name") >= 0) {
-        setMoreBnameValid(true);
-      }
-      if (err.errors[0].indexOf("email") >= 0 || err.errors[1].indexOf("email") >= 0) {
-        setMoreBemailValid(true);
-      }
-    });
-  };
-
+    setMoreBoardMName('');
+    setMoreBoardMEmail('');
+    setMoreBoardMEmailAlert(false);
+  }).catch((err, d) => {
+    console.log(err.errors, err.path, err.value);
+    if (err.errors[0].indexOf("name") >= 0) {
+      setMoreBnameValid(true);
+    }
+    if (err.errors[0].indexOf("email") >= 0 || err.errors[1].indexOf("email") >= 0) {
+      setMoreBemailValid(true);
+    }
+  });
+};
   const onDeleteMoreBM = (index) => {
     let result = moreBoardMembers.filter((bm, idx) => {
       return index != idx;
     });
     setMoreBoardMembers(result);
   }
+*/
 
   const onCreate = (values, resetForm) => {
-    values['more_board_members'] = moreBoardMembers;
+    //values['more_board_members'] = moreBoardMembers;
     createBuilding(token, user.permission, values).then(response => {
       const { type, message } = response.data;
       if (type == "S_OK") {
         if (building_id) {
           info("The building info is updated successfully.");
         } else {
-          resetForm();
-          setMoreBoardMembers([]);
+          //setBuilding({});
+          //resetForm({});
+          //setMoreBoardMembers([]);
+          if (user.permission == 'admin') {
+            navigate('/admin/buildings');
+          } else {
+            navigate('/buildings');
+          }
           info("A new building is created successfully.");
         }
       }
@@ -182,8 +191,9 @@ export function BuildingForm() {
     if (building_id != null) {
       getBuilding(token, user.permission, building_id).then(response => {
         const { type, building, board_members } = response.data;
+        building['terms'] = true;
         setBuilding(building);
-        setMoreBoardMembers(board_members);
+        //setMoreBoardMembers(board_members);
       }).catch((error) => {
         const { status, data } = error.response;
         if (status == 401) {
@@ -200,7 +210,7 @@ export function BuildingForm() {
     <div className="tw-container tw-mx-auto">
       <div className="tw-m-3 tw-p-3 tw-rounded-lg tw-bg-green-100">
         <div className="tw-text-center tw-p-5">
-          <span className="tw-text-xl">New Building Request Form</span>
+          <span className="tw-text-xl">{building_id ? 'Building Form' : 'New Building Request Form'}</span>
         </div>
 
         <Formik
@@ -334,7 +344,7 @@ export function BuildingForm() {
                       </Form.Group>
                     </Col>
                     {
-                      user.permission && (<Col md={6}>
+                      user.permission == 'admin' && (<Col md={6}>
                         <Form.Group className="mb-3" controlId="manager_id">
                           <Form.Label>Manager</Form.Label>
                           <Form.Select aria-label="" name="manager_id" isInvalid={!!errors.manager_id} value={values.manager_id} onChange={handleChange}>
@@ -368,6 +378,8 @@ export function BuildingForm() {
                       </Form.Group>
                     </Col>
                   </Row>
+                </div>
+                <div className="tw-p-2">
                   <Row>
                     <Col md={12}>
                       <div className="tw-bg-green-200 tw-p-2 tw-rounded-md tw-font-medium">
@@ -407,8 +419,6 @@ export function BuildingForm() {
                       </Form.Group>
                     </Col>
                   </Row>
-                </div>
-                <div className="tw-p-2">
                   <Row>
                     <Col md={12}>
                       <div className="tw-bg-green-200 tw-p-2 tw-rounded-md tw-font-medium">
@@ -449,7 +459,8 @@ export function BuildingForm() {
                         <Form.Control.Feedback type="invalid">{errors.repassword}</Form.Control.Feedback>
                       </Form.Group>
                     </Col>
-                    <Col md={12}>
+                    {/*
+                    <Col md={12} className="tw-hidden">
                       <div className="tw-bg-green-200 tw-p-2 tw-rounded-md tw-font-medium">
                         Add More Board Members?
                       </div>
@@ -507,6 +518,7 @@ export function BuildingForm() {
                         </Table>
                       </div>
                     </div>
+                          */}
                   </Row>
                 </div>
               </div>
