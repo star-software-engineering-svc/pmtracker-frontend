@@ -33,13 +33,12 @@ export function BuildingForm() {
   const user = useSelector(getUser);
   const navigate = useNavigate();
 
-  /*
   const [moreBoardMName, setMoreBoardMName] = useState('');
   const [moreBoardMEmail, setMoreBoardMEmail] = useState('');
   const [moreBoardMEmailAlert, setMoreBoardMEmailAlert] = useState(false);
 
   const [moreBoardMembers, setMoreBoardMembers] = useState([]);
-  */
+
   const [carriers, setCarriers] = useState([]);
 
   const [more_bname_valid, setMoreBnameValid] = useState(false);
@@ -80,64 +79,62 @@ export function BuildingForm() {
       manager_id: yup.string().required(),
     });
 
-  /*
-const onAddBoardMember = () => {
+  const onAddBoardMember = () => {
 
-  const sch = yup.object().shape({
-    name: yup.string().required(),
-    email: yup.string().email().required()
-  });
-  setMoreBnameValid(false);
-  setMoreBemailValid(false);
+    const sch = yup.object().shape({
+      name: yup.string().required(),
+      email: yup.string().email().required()
+    });
+    setMoreBnameValid(false);
+    setMoreBemailValid(false);
 
-  let result = sch.validate({ name: moreBoardMName, email: moreBoardMEmail }, { abortEarly: false }).then(valid => {
-    console.log(valid);
-    let result = {
-      name: moreBoardMName,
-      email: moreBoardMEmail,
-      email_alerts: moreBoardMEmailAlert
-    };
+    let result = sch.validate({ name: moreBoardMName, email: moreBoardMEmail }, { abortEarly: false }).then(valid => {
+      console.log(valid);
+      let result = {
+        name: moreBoardMName,
+        email: moreBoardMEmail,
+        email_alerts: moreBoardMEmailAlert
+      };
 
-    const found = moreBoardMembers.find(element => element.board_m_email == moreBoardMEmail);
-    if (found) {
-      info("The email is already added.");
-      return;
-    }
+      const found = moreBoardMembers.find(element => element.board_m_email == moreBoardMEmail);
+      if (found) {
+        info("The email is already added.");
+        return;
+      }
 
-    setMoreBoardMembers([...moreBoardMembers, result]);
+      setMoreBoardMembers([...moreBoardMembers, result]);
 
-    setMoreBoardMName('');
-    setMoreBoardMEmail('');
-    setMoreBoardMEmailAlert(false);
-  }).catch((err, d) => {
-    console.log(err.errors, err.path, err.value);
-    if (err.errors[0].indexOf("name") >= 0) {
-      setMoreBnameValid(true);
-    }
-    if (err.errors[0].indexOf("email") >= 0 || err.errors[1].indexOf("email") >= 0) {
-      setMoreBemailValid(true);
-    }
-  });
-};
+      setMoreBoardMName('');
+      setMoreBoardMEmail('');
+      setMoreBoardMEmailAlert(false);
+    }).catch((err, d) => {
+      console.log(err.errors, err.path, err.value);
+      if (err.errors[0].indexOf("name") >= 0) {
+        setMoreBnameValid(true);
+      }
+      if (err.errors[0].indexOf("email") >= 0 || err.errors[1].indexOf("email") >= 0) {
+        setMoreBemailValid(true);
+      }
+    });
+  };
   const onDeleteMoreBM = (index) => {
     let result = moreBoardMembers.filter((bm, idx) => {
       return index != idx;
     });
     setMoreBoardMembers(result);
   }
-*/
 
   const onCreate = (values, resetForm) => {
-    //values['more_board_members'] = moreBoardMembers;
+    values['more_board_members'] = moreBoardMembers;
     createBuilding(token, user.permission, values).then(response => {
       const { type, message } = response.data;
       if (type == "S_OK") {
         if (building_id) {
           info("The building info is updated successfully.");
         } else {
-          //setBuilding({});
-          //resetForm({});
-          //setMoreBoardMembers([]);
+          setBuilding({});
+          resetForm({});
+          setMoreBoardMembers([]);
           if (user.permission == 'admin') {
             navigate('/admin/buildings');
           } else {
@@ -193,7 +190,7 @@ const onAddBoardMember = () => {
         const { type, building, board_members } = response.data;
         building['terms'] = true;
         setBuilding(building);
-        //setMoreBoardMembers(board_members);
+        setMoreBoardMembers(board_members);
       }).catch((error) => {
         const { status, data } = error.response;
         if (status == 401) {
@@ -378,8 +375,6 @@ const onAddBoardMember = () => {
                       </Form.Group>
                     </Col>
                   </Row>
-                </div>
-                <div className="tw-p-2">
                   <Row>
                     <Col md={12}>
                       <div className="tw-bg-green-200 tw-p-2 tw-rounded-md tw-font-medium">
@@ -419,6 +414,8 @@ const onAddBoardMember = () => {
                       </Form.Group>
                     </Col>
                   </Row>
+                </div>
+                <div className="tw-p-2">
                   <Row>
                     <Col md={12}>
                       <div className="tw-bg-green-200 tw-p-2 tw-rounded-md tw-font-medium">
@@ -459,7 +456,6 @@ const onAddBoardMember = () => {
                         <Form.Control.Feedback type="invalid">{errors.repassword}</Form.Control.Feedback>
                       </Form.Group>
                     </Col>
-                    {/*
                     <Col md={12} className="tw-hidden">
                       <div className="tw-bg-green-200 tw-p-2 tw-rounded-md tw-font-medium">
                         Add More Board Members?
@@ -518,7 +514,6 @@ const onAddBoardMember = () => {
                         </Table>
                       </div>
                     </div>
-                          */}
                   </Row>
                 </div>
               </div>
