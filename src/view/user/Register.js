@@ -12,27 +12,19 @@ import { Button, Form, Row, Col, Table, InputGroup } from 'react-bootstrap';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-import { getCarriers, createBuilding, getBuilding } from '../../service/ManagerService';
+import { getCarriers, register } from '../../service/ManagerService';
 import { info, warning } from '../helper/snack';
 
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import { getManager, saveManager } from '../../service/AdminService';
 
 const phoneRegExp = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
 
-export function ManagerForm() {
-
-  let { manager_id } = useParams();
-
-  console.log(manager_id);
+export function Register() {
 
   const dispatch = useDispatch();
-  const token = useSelector(getToken);
-  const user = useSelector(getUser);
   const navigate = useNavigate();
 
-  const [manager, setManager] = useState({});
   const [carriers, setCarriers] = useState([]);
 
   let schema = yup.object().shape({
@@ -43,21 +35,20 @@ export function ManagerForm() {
     zip: yup.string().required(),
     cell_phone: yup.string().required().matches(phoneRegExp, 'Phone number is not valid'),
     work_phone: yup.string(),
-    password: yup.string(),
-    repassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
+    password: yup.string().required(),
+    repassword: yup.string().required().oneOf([yup.ref('password')], 'Passwords should be matched.'),
+    carrier_id: yup.string().required()
   });
 
   const onCreate = (values, resetForm) => {
 
-    saveManager(token, user.permission, values).then(response => {
+    register(values).then(response => {
       const { type, message } = response.data;
       if (type == "S_OK") {
-        if (manager_id) {
-          info("The manager info is updated successfully.");
-        } else {
-          navigate('/admin/managers')
-          info("A new manager is created successfully.");
-        }
+        navigate('/login')
+        info("A new account is created successfully.");
+      } else {
+        warning(message);
       }
 
     }).catch((error) => {
@@ -72,7 +63,7 @@ export function ManagerForm() {
   }
 
   useEffect(() => {
-    getCarriers(/*token, user.permission*/).then(response => {
+    getCarriers().then(response => {
       const { type, carriers } = response.data;
       setCarriers(carriers);
     }).catch((error) => {
@@ -84,28 +75,13 @@ export function ManagerForm() {
         warning(data.message);
       }
     });
-
-    if (manager_id != null) {
-      getManager(token, user.permission, manager_id).then(response => {
-        const { type, manager } = response.data;
-        setManager(manager);
-      }).catch((error) => {
-        const { status, data } = error.response;
-        if (status == 401) {
-          dispatch(setToken(null));
-          dispatch(setUser(null));
-        } else {
-          warning(data.message);
-        }
-      });
-    }
   }, []);
 
   return (
     <div className="tw-container tw-mx-auto">
       <div className="tw-m-3 tw-p-3 tw-rounded-lg tw-bg-green-100">
         <div className="tw-text-center tw-p-5">
-          <span className="tw-text-xl">Manager Form</span>
+          <span className="tw-text-xl">New Account Registration</span>
         </div>
 
         <Formik
@@ -114,7 +90,9 @@ export function ManagerForm() {
           onSubmit={(values, { setSubmitting, resetForm }) => {
             onCreate(values, resetForm);
           }}
-          initialValues={manager}
+          initialValues={{
+
+          }}
         >
           {({
             handleSubmit,
@@ -131,11 +109,6 @@ export function ManagerForm() {
                 </div>
                 <div className="tw-p-2 lg:tw-col-span-3">
                   <Row>
-                    <Col md={12}>
-                      <div className="tw-bg-green-200 tw-p-2 tw-rounded-md tw-font-medium">
-                        Manager Info
-                      </div>
-                    </Col>
                     <Col md={4}>
                       <Form.Control type="hidden" name="id" value={values.id} />
                       <Form.Group className="mb-3" controlId="name">
@@ -267,7 +240,7 @@ export function ManagerForm() {
                     <Col md={4}>
                       <Form.Group className="mb-3" controlId="carrier_id">
                         <Form.Label>Carrier</Form.Label>
-                        <Form.Select aria-label="" name="carrier_id" value={values.carrier_id} onChange={handleChange}>
+                        <Form.Select aria-label="" name="carrier_id" isInvalid={!!errors.carrier_id} value={values.carrier_id} onChange={handleChange}>
                           <option value=""></option>
                           {carriers.map(c => {
                             return (<option key={c.carrier_id} value={c.carrier_id}>{c.name}</option>);

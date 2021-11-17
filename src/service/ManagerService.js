@@ -7,6 +7,10 @@ export function login(email, password) {
   });
 }
 
+export function register(values) {
+  return instance.post('manager/register', values);
+}
+
 export function getBuildings(token, permission, page, perPage, sortCol, sortDir) {
   return instance.get('manager/buildings/get-buildings', {
     params: {
@@ -133,15 +137,15 @@ export function getInternalNotes(token, permission, building_id) {
   });
 }
 
-export function getCarriers(token, permission) {
-  return instance.get('manager/carrier/get-carrier-list', {
+export function getCarriers(/*token, permission*/) {
+  return instance.get('manager/carrier/get-carrier-list'/*, {
     params: {
       permission: permission
     },
     headers: {
       'Authorization': `Bearer ${token}`
     }
-  });
+  }*/);
 }
 
 export function getTicketCategories(token, permission) {

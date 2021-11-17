@@ -27,6 +27,8 @@ import { ManagerProfile } from '../user/ManagerProfile';
 import { AdminBuildings } from '../admin/AdminBuildings';
 import { AdminManagers } from '../admin/AdminManagers';
 import { ManagerForm } from '../user/ManagerForm';
+import { Register } from '../user/Register';
+import { ForceRedirectLoggedIn } from '../auth/ForceRedirectLoggedIn';
 
 export const MainLayout = ({ children }) => {
   const token = useSelector(getToken);
@@ -119,7 +121,8 @@ export const MainLayoutRoutes = ({ component: Component, ...rest }) => {
       <Routes>
         <Route path="*" element={<Navigate to="/home" state={{ from: location }} />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<ForceRedirectLoggedIn><Login /></ForceRedirectLoggedIn>} />
+        <Route path="/register" element={<ForceRedirectLoggedIn><Register /></ForceRedirectLoggedIn>} />
         <Route path="/dashboard" element={<RequireManager><Dashboard /></RequireManager>} />
         <Route path="/buildings" element={<RequireManager><Buildings /></RequireManager>} />
         <Route path="/building/:building_id" element={<RequireManager><BuildingDetail /></RequireManager>} />

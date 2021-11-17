@@ -78,6 +78,9 @@ export function Login() {
         <div className="tw-flex tw-flex-row tw-justify-end">
           <Link to="/admin/login">Sign in as an administrator</Link>
         </div>
+        <div className="tw-flex tw-flex-row tw-justify-center tw-mt-5">
+          If you don't have an account,&nbsp;<Link to="/register">click here.</Link>
+        </div>
       </Form >
     </div >
   );

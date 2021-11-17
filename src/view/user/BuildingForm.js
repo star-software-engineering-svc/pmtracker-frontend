@@ -159,7 +159,7 @@ const onAddBoardMember = () => {
   }
 
   useEffect(() => {
-    getCarriers(token, user.permission).then(response => {
+    getCarriers(/*token, user.permission*/).then(response => {
       const { type, carriers } = response.data;
       setCarriers(carriers);
     }).catch((error) => {
