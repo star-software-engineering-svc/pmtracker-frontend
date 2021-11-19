@@ -19,6 +19,8 @@ import { info, warning } from '../helper/snack';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { BuildingSelectorModal } from './modal/BuildingSelectorModal';
+import { TicketSubmitModal } from './modal/TicketSubmitModal';
+import { NotifySuperModal } from './modal/NotifySuperModal';
 
 
 const phoneRegExp = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
@@ -50,6 +52,13 @@ export function TicketForm() {
   const [attachment1, setAttachment1] = useState(null);
   const [attachment2, setAttachment2] = useState(null);
 
+  const [showTicketModal, setShowTicketModal] = useState(false);
+  const [ticket, setTicket] = useState({});
+
+  const onCloesTicketModal = () => {
+    setShowTicketModal(false);
+  }
+
   const onCreate = (values, resetForm) => {
     if (!curBuilding.building_id) {
       confirmAlert({
@@ -67,12 +76,23 @@ export function TicketForm() {
 
     values['building_id'] = curBuilding.building_id;
 
-    createTicket(token, user.permission, values, attachment1, attachment2).then(response => {
+    createTicket(token, user ? user.permission : '', values, attachment1, attachment2).then(response => {
       const { type, message } = response.data;
-      setCurBuilding({});
-      resetForm();
-      document.getElementById("attachment1").value = '';
-      document.getElementById("attachment2").value = '';
+
+      if (type == 'S_OK') {
+        setCurBuilding({});
+        resetForm();
+        document.getElementById("attachment1").value = '';
+        document.getElementById("attachment2").value = '';
+
+        if (!token) {
+          console.log(response.data.ticket);
+          setTicket(response.data.ticket);
+          setShowTicketModal(true);
+        }
+      } else {
+        warning(message);
+      }
     }).catch((error) => {
       const { status, data } = error.response;
       if (status == 401) {
@@ -90,7 +110,6 @@ export function TicketForm() {
   }
 
   const onShowBuildingModal = () => {
-    console.log('ok');
     setShowBuildingModal(true);
   }
 
@@ -99,7 +118,7 @@ export function TicketForm() {
   }
 
   useEffect(() => {
-    getTicketCategories(token, user.permission).then(response => {
+    getTicketCategories(token, user ? user.permission : null).then(response => {
       const { type, categories } = response.data;
       setTicketCategories(categories);
     }).catch((error) => {
@@ -298,7 +317,7 @@ export function TicketForm() {
                           <Form.Check
                             required
                             name="terms"
-                            label={(<>I've read and agree with the <Link to="/terms">terms and conditions</Link></>)}
+                            label={(<>I've read and agree with the <Link to="/terms" target="_blank">terms and conditions</Link></>)}
                             onChange={handleChange}
                             defaultChecked={values.terms}
                             isInvalid={!!errors.terms}
@@ -321,6 +340,7 @@ export function TicketForm() {
           )}
         </Formik>
       </div >
+      <TicketSubmitModal shown={showTicketModal} handleClose={onCloesTicketModal} ticket={ticket} />
       <BuildingSelectorModal show={showBuildingModal} handleClose={onCloesModal} selectBuilding={selectBuilding} />
     </div >
   );

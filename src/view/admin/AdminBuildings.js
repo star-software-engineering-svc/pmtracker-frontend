@@ -53,6 +53,8 @@ export function AdminBuildings() {
   }
 
   const onRowClicked = (row) => {
+    console.log(row);
+    navigate('/admin/building/' + row.building_id);
   }
 
   const handleSort = (column, sortDirection) => {
@@ -142,37 +144,43 @@ export function AdminBuildings() {
     {
       name: 'No',
       selector: (row, index) => index + 1,
-      sortable: false
+      sortable: false,
+      style: { cursor: 'pointer' }
     },
     {
       name: 'Building Name',
       selector: row => row.name,
       sortable: true,
-      sortField: "name"
+      sortField: "name",
+      style: { cursor: 'pointer' }
     },
     {
       name: 'Building Code',
       selector: row => row.code,
       sortable: true,
-      sortField: "code"
+      sortField: "code",
+      style: { cursor: 'pointer' }
     },
     {
       name: 'Address',
       selector: row => row.address,
       sortable: true,
-      sortField: "address"
+      sortField: "address",
+      style: { cursor: 'pointer' }
     },
     {
       name: 'City',
       selector: row => row.city,
       sortable: true,
-      sortField: "city"
+      sortField: "city",
+      style: { cursor: 'pointer' }
     },
     {
       name: 'Zip',
       selector: row => row.zip,
       sortable: true,
-      sortField: "zip"
+      sortField: "zip",
+      style: { cursor: 'pointer' }
     },
     {
       name: 'Active',

@@ -9,7 +9,6 @@ import './styles/styles.css';
 import { MainLayoutRoutes } from './view/layout/MainLayout';
 
 function App() {
-  console.log('App');
   return (
     <div>
       <MainLayoutRoutes />

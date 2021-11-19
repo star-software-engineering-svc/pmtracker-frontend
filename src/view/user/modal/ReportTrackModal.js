@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { Modal, Button } from 'react-bootstrap';
 
 export function ReportTrackModal({ show, handleClose, handleShowCall }) {
 
+  const navigate = useNavigate();
+
   const [showCallModal, setShowCallModal] = useState(0);
   const onShowCallModal = () => {
     setShowCallModal(1);
+  }
+
+  const handleReport = () => {
+    navigate("/ticket/new");
+  }
+
+  const handleTrack = () => {
+    navigate("/track/login");
   }
 
   return (
@@ -38,11 +49,11 @@ export function ReportTrackModal({ show, handleClose, handleShowCall }) {
             <div className="tw-pl-5">
               <div className="tw-flex tw-flex-row tw-justify-between pt-2">
                 <div><i className="fas fa-angle-right"></i>&nbsp;Report a <span style={{ color: '#005ca6' }}>New Issue</span> Online</div>
-                <div><Button className="tw-w-32">Report&nbsp;&nbsp;<i className="fas fa-clipboard-list"></i></Button></div>
+                <div><Button className="tw-w-32" onClick={handleReport}>Report&nbsp;&nbsp;<i className="fas fa-clipboard-list"></i></Button></div>
               </div>
               <div className="tw-flex tw-flex-row tw-justify-between pt-2">
                 <div><i className="fas fa-angle-right"></i>&nbsp;Track an <span style={{ color: '#005ca6' }}>Existing Issue</span> Online</div>
-                <div><Button className="tw-w-32">Track&nbsp;&nbsp;<i className="fas fa-route"></i></Button></div>
+                <div><Button className="tw-w-32" onClick={handleTrack}>Track&nbsp;&nbsp;<i className="fas fa-route"></i></Button></div>
               </div>
               <div className="tw-flex tw-flex-row tw-justify-between pt-2">
                 <div><i className="fas fa-angle-right"></i>&nbsp;I prefer to <span className="tw-text-yellow-500">use the phone</span></div>

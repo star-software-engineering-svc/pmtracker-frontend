@@ -481,7 +481,7 @@ export function BuildingForm() {
                       </Form.Group>
                     </Col>
                     <div className="tw-flex tw-flex-row tw-justify-end">
-                      <Button onClick={onAddBoardMember}><i className="fas fa-plus"></i>&nbsp; Add</Button>
+                      <Button onClick={onAddBoardMember}><i className="fas fa-plus"></i>&nbsp; Add Board Member</Button>
                     </div>
                     <div className="tw-p-2">
                       <div className="tw-overflow-auto">
@@ -522,7 +522,7 @@ export function BuildingForm() {
                   <Form.Check
                     required
                     name="terms"
-                    label={(<>I've read and agree with the <Link to="/terms">terms and conditions</Link></>)}
+                    label={(<>I've read and agree with the <Link to="/terms" target="_blank">terms and conditions</Link></>)}
                     onChange={handleChange}
                     defaultChecked={values.terms}
                     isInvalid={!!errors.terms}

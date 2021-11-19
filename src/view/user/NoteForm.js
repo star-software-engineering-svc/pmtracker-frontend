@@ -33,6 +33,8 @@ export function NoteForm() {
   const user = useSelector(getUser);
   const navigate = useNavigate();
 
+  const manager_id = user.permission == 'manager' ? user.id : 0;
+
   const [showBuildingModal, setShowBuildingModal] = useState(false);
   const [curBuilding, setCurBuilding] = useState({});
 
@@ -175,7 +177,7 @@ export function NoteForm() {
           )}
         </Formik>
       </div >
-      <BuildingSelectorModal show={showBuildingModal} handleClose={onCloesModal} selectBuilding={selectBuilding} />
+      <BuildingSelectorModal show={showBuildingModal} handleClose={onCloesModal} selectBuilding={selectBuilding} manager_id={manager_id} />
     </div >
   );
 }

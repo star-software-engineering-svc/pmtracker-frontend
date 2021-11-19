@@ -11,7 +11,7 @@ import {
 } from '../../../features/user/userSlice';
 import { warning } from '../../helper/snack';
 
-export function BuildingSelectorModal({ show, handleClose, selectBuilding }) {
+export function BuildingSelectorModal({ show, handleClose, selectBuilding, manager_id }) {
 
   const dispatch = useDispatch();
   const token = useSelector(getToken);
@@ -26,7 +26,7 @@ export function BuildingSelectorModal({ show, handleClose, selectBuilding }) {
   }
 
   const loadBulidings = () => {
-    filterBuildings(token, user.permission, zip, keyword, 30).then(response => {
+    filterBuildings(token, user ? user.permission : '', zip, keyword, 30, manager_id).then(response => {
       const { type, buildings } = response.data;
       setBuildings(buildings);
     }).catch((error) => {

@@ -81,32 +81,38 @@ export function Buildings() {
     {
       name: 'No',
       selector: (row, index) => index + 1,
-      sortable: false
+      sortable: false,
+      style: { cursor: 'pointer' }
     },
     {
       name: 'Building Name',
       selector: row => row.name,
-      sortable: true
+      sortable: true,
+      style: { cursor: 'pointer' }
     },
     {
       name: 'Building Code',
       selector: row => row.code,
-      sortable: true
+      sortable: true,
+      style: { cursor: 'pointer' }
     },
     {
       name: 'Address',
       selector: row => row.address,
-      sortable: true
+      sortable: true,
+      style: { cursor: 'pointer' }
     },
     {
       name: 'City',
       selector: row => row.city,
-      sortable: true
+      sortable: true,
+      style: { cursor: 'pointer' }
     },
     {
       name: 'Zip',
       selector: row => row.zip,
-      sortable: true
+      sortable: true,
+      style: { cursor: 'pointer' }
     },
   ];
 

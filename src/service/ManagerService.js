@@ -159,13 +159,14 @@ export function getTicketCategories(token, permission) {
   });
 }
 
-export function filterBuildings(token, permission, zip, keyword, limit) {
+export function filterBuildings(token, permission, zip, keyword, limit, manager_id) {
   return instance.get('manager/buildings/filter-buildings', {
     params: {
       zip: zip,
       keyword: keyword,
       limit: limit,
-      permission: permission
+      permission: permission,
+      manager_id: manager_id
     },
     headers: {
       'Authorization': `Bearer ${token}`
@@ -230,4 +231,21 @@ export function updateProfile(token, permission, values) {
         'Authorization': `Bearer ${token}`
       }
     });
+}
+
+
+export function ticketLogin(code, email) {
+  return instance.post('ticket/login',
+    {
+      code, email
+    });
+}
+
+export function getTicket4Track(token, ticket_id) {
+  return instance.get('ticket/get-ticket-4track', {
+    params: {
+      token,
+      ticket_id
+    }
+  });
 }
