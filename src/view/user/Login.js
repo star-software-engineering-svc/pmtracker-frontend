@@ -53,7 +53,7 @@ export function Login() {
         {errorMsg && (<Alert variant={'warning'}>{errorMsg}</Alert>)}
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" onChange={e => { setErrorMsg(null); setEmail(e.target.value) }} required />
+          <Form.Control type="text" placeholder="Enter email" onChange={e => { setErrorMsg(null); setEmail(e.target.value) }} required />
           <Form.Control.Feedback type="invalid">
             Please enter your email.
           </Form.Control.Feedback>

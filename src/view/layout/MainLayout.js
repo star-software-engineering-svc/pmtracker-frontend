@@ -55,7 +55,7 @@ export const MainLayout = ({ children }) => {
               <Navbar.Brand href="/">
                 <div className="tw-flex tw-flex-row">
                   <div>
-                    <img className="nav-logo" src="http://localhost:8894/images/logo.png" />
+                    <img className="nav-logo" src="https://pmtrackerv2.com/images/logo.png" />
                   </div>
                   <div>
                     &nbsp;PROPERTY MANAGEMENT TRACKER
@@ -99,7 +99,7 @@ export const MainLayout = ({ children }) => {
           <div className="footer tw-p-5">
             <div className="tw-flex tw-flex-row tw-justify-center">© COPYRIGHT 2021. Property Management Tracker. All Rights Reserved.</div>
             <div className="tw-flex tw-flex-row tw-justify-center">
-              Site by&nbsp;<a href="https://starwebprogramming.com" target="_blank">StarWebProgramming.com <img className="tw-inline" src="http://localhost:8894/images/star3.png" /></a>
+              Site by&nbsp;<a href="https://starwebprogramming.com" target="_blank">StarWebProgramming.com <img className="tw-inline" src="https://pmtrackerv2.com/images/star3.png" /></a>
             </div>
             <div className="tw-flex tw-flex-row tw-justify-center">
               <div className="tw-p-1">
