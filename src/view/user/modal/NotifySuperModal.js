@@ -38,7 +38,7 @@ export function NotifySuperModal({ shown, handleClose, ticket, onSuccess }) {
     <>
       <Modal show={shown} onHide={handleClose} size="md">
         <Modal.Header closeButton>
-          <Modal.Title>Update Ticket Status</Modal.Title>
+          <Modal.Title>Send notification to super</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {((ticket.cell_phone == "" || ticket.domain == "") && ticket.supers_email == "") && (<div className="tw-text-red-300">
@@ -60,7 +60,7 @@ export function NotifySuperModal({ shown, handleClose, ticket, onSuccess }) {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={onSave}>Save</Button>
+          <Button onClick={onSave}>Send</Button>
         </Modal.Footer>
       </Modal>
     </>

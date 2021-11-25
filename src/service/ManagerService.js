@@ -26,6 +26,17 @@ export function getBuildings(token, permission, page, perPage, sortCol, sortDir)
   });
 }
 
+export function getBuildingNotes(building_id) {
+  console.log(building_id);
+  return instance.get('manager/buildings/get-building-notes', {
+    params: {
+      building_id
+    },
+    headers: {
+    }
+  });
+}
+
 export function getBuilding(token, permission, building_id) {
   return instance.get('manager/buildings/building', {
     params: {

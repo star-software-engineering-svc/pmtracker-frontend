@@ -34,8 +34,10 @@ export function Login() {
     setValidated(true);
     login(email, password).then((response) => {
       console.log(response.data);
-      dispatch(setToken(response.data.access_token));
-      dispatch(setUser(response.data.user));
+
+      const { access_token, user } = response.data;
+      dispatch(setToken(access_token));
+      dispatch(setUser(user));
 
       navigate('/dashboard');
     }).catch((error) => {
@@ -44,6 +46,8 @@ export function Login() {
         setErrorMsg('Please enter the correct email and pasword.');
       }
     });
+
+    return false;
   }
 
   return (

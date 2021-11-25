@@ -18,6 +18,8 @@ export function RequireManager({ children }) {
 
   let result = token != null && token != "" && user && user.permission == 'manager';
 
+  console.log('is manager = ', result);
+
   if (!result) {
     return <Navigate to="/login" state={{ from: location }} />;
   }

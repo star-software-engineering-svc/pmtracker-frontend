@@ -98,3 +98,7 @@ body {
     border: 1px solid #9f9f9f;
     text-align: center;
 }
+
+.ticket-form {
+    width: 100%; max-width: 480px; margin: 0 auto;
+}

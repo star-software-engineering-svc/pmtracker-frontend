@@ -19,7 +19,7 @@ import { NotifySuperModal } from './modal/NotifySuperModal';
 import { TicketDescModal } from './modal/TicketDescModal';
 import { InternalNoteModal } from './modal/InternalNoteModal';
 
-export function BuildingTicketsList({ building_id }) {
+export function BuildingTicketsList({ building_id, refreshBuilding }) {
 
   const dispatch = useDispatch();
   const token = useSelector(getToken);
@@ -55,6 +55,11 @@ export function BuildingTicketsList({ building_id }) {
     setCurrentTicket(ticket);
     setInternalNoteModalShow(true);
   };
+
+  const onSuccessAddNote = () => {
+    setInternalNoteModalShow(false);
+    refreshBuilding();
+  }
 
   const loadTickets = () => {
     setTicketModalShow(false);
@@ -121,7 +126,9 @@ export function BuildingTicketsList({ building_id }) {
                     <div className="info-inline">
                       <div>Ticket Status</div>
                       <div>
-                        <Button onClick={() => { onClickTicketStatus(ticket) }}>{ticket.ticket_status_name}</Button>
+                        <div onClick={() => { onClickTicketStatus(ticket) }} className={'tw-cursor-pointer tw-text-white tw-p-1 tw-text-center ' + (ticket.ticket_status_id == 1 ? 'tw-bg-green-400' : (ticket.ticket_status_id == 2 ? 'tw-bg-yellow-400' : 'tw-bg-red-400'))}>
+                          {ticket.ticket_status_name}
+                        </div>
                       </div>
                     </div>
                     <div className="info-inline">
@@ -132,8 +139,8 @@ export function BuildingTicketsList({ building_id }) {
                     </div>
                     <div className="tw-pl-2">
                       <Button onClick={() => { onClickNotifySuper(ticket) }} className="tw-m-1"><i className="fas fa-envelope"></i>&nbsp;Notify Super</Button>&nbsp;
-                      <Button onClick={() => { onClickTicketDesc(ticket) }} className="tw-m-1"><i className="fas fa-pen"></i>&nbsp;Edit</Button>&nbsp;
-                      <Button onClick={() => { onClickInternalNote(ticket) }} className="tw-m-1"><i className="fas fa-plus"></i>&nbsp;Add Note</Button>
+                      <Button onClick={() => { onClickTicketDesc(ticket) }} className="tw-m-1"><i className="fas fa-pen"></i>&nbsp;Reply to Resident</Button>&nbsp;
+                      <Button onClick={() => { onClickInternalNote(ticket) }} className="tw-m-1"><i className="fas fa-plus"></i>&nbsp;Add Internal Note</Button>
                     </div>
                   </div>
                   <div className="tw-p-2">
@@ -150,7 +157,7 @@ export function BuildingTicketsList({ building_id }) {
       <TicketStatusModal shown={ticketModalShow} handleClose={hideTicketModal} ticket={currentTicket} onSuccess={loadTickets} />
       <NotifySuperModal shown={notifyModalShow} handleClose={hideNotifyModal} ticket={currentTicket} onSuccess={loadTickets} />
       <TicketDescModal shown={ticketDescModalShow} handleClose={hideTicketDescModal} ticket={currentTicket} onSuccess={loadTickets} />
-      <InternalNoteModal shown={internalNoteModalShow} handleClose={hideInternalNoteModal} ticket={currentTicket} onSuccess={loadTickets} />
+      <InternalNoteModal shown={internalNoteModalShow} handleClose={hideInternalNoteModal} ticket={currentTicket} onSuccess={onSuccessAddNote} />
     </>
   );
 }

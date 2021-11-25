@@ -19,7 +19,10 @@ export function ForceRedirectLoggedIn({ children }) {
   let result = token != null && token != "" && user;
 
   if (result) {
-    return <Navigate to="/" state={{ from: location }} />;
+    if (user.permission == 'manager')
+      return <Navigate to="/dashboard" state={{ from: location }} />;
+    else
+      return <Navigate to="/admin/home" state={{ from: location }} />;
   }
 
   return children;

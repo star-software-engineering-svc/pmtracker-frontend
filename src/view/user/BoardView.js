@@ -91,7 +91,7 @@ export function BoardView() {
         </div>
         <div>
           <div className="tw-text-center tw-text-xl tw-p-3">Internal Notes/Costs</div>
-          <div class="tw-bg-white">
+          <div className="tw-bg-white">
             <table className="table table-striped table-hover">
               <thead>
                 <tr>
@@ -115,7 +115,7 @@ export function BoardView() {
               </tbody>
             </table>
           </div>
-          <div class="tw-bg-white">
+          <div className="tw-bg-white">
             <table className="table table-striped table-hover">
               <thead>
                 <tr>

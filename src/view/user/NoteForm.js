@@ -12,7 +12,7 @@ import { Button, Form, Row, Col, Table, InputGroup } from 'react-bootstrap';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-import { createNote } from '../../service/ManagerService';
+import { createNote, getBuildings } from '../../service/ManagerService';
 
 import { info, warning } from '../helper/snack';
 
@@ -37,6 +37,7 @@ export function NoteForm() {
 
   const [showBuildingModal, setShowBuildingModal] = useState(false);
   const [curBuilding, setCurBuilding] = useState({});
+  const [buildings, setBuildings] = useState([]);
 
   const onCreate = (values, resetForm) => {
     if (!curBuilding.building_id) {
@@ -84,6 +85,10 @@ export function NoteForm() {
   }
 
   useEffect(() => {
+    getBuildings(token, user.permission).then((response) => {
+      const { type, result } = response.data;
+      setBuildings(result);
+    })
   }, []);
 
   return (
@@ -119,55 +124,71 @@ export function NoteForm() {
                   <Row>
                     <Col md={12}>
                       <div className="tw-bg-green-200 tw-p-2 tw-rounded-md tw-mb-2">
-                        <div className="tw-flex tw-flex-row tw-justify-center">
-                          <Button onClick={onShowBuildingModal}>Select A Building</Button>
-                        </div>
-                        <div className="tw-font-medium">
-                          Building Info
-                        </div>
-                        <div className="info-inline">
-                          <div>Building ID</div>
-                          <div>{curBuilding.building_id}</div>
-                        </div>
-                        <div className="info-inline">
-                          <div>Building Name</div>
-                          <div>{curBuilding.name}</div>
-                        </div>
-                        <div className="info-inline">
-                          <div>Manager's Name</div>
-                          <div>{curBuilding.managers_name}</div>
-                        </div>
-                        <div className="info-inline">
-                          <div>Manager's Email</div>
-                          <div>{curBuilding.managers_email}</div>
-                        </div>
-                        <div className="info-inline">
-                          <div>Code</div>
-                          <div>{curBuilding.code}</div>
-                        </div>
-                        <div className="info-inline">
-                          <div>Address</div>
-                          <div>{curBuilding.address}</div>
-                        </div>
-                        <div className="info-inline">
-                          <div>City</div>
-                          <div>{curBuilding.city}</div>
-                        </div>
-                        <div className="info-inline">
-                          <div>State</div>
-                          <div>{curBuilding.state}</div>
-                        </div>
+                        {
+                          !curBuilding.building_id && (
+                            <>
+                              <div className="tw-flex tw-flex-row tw-justify-center">
+                                <Button onClick={onShowBuildingModal}>Select A Building</Button>
+                              </div>
+                            </>
+                          )}
+                        {
+                          curBuilding.building_id && (
+                            <>
+                              <div className="tw-font-medium">
+                                Building Info
+                              </div>
+                              <div className="info-inline">
+                                <div>Building ID</div>
+                                <div>{curBuilding.building_id}</div>
+                              </div>
+                              <div className="info-inline">
+                                <div>Building Name</div>
+                                <div>{curBuilding.name}</div>
+                              </div>
+                              <div className="info-inline">
+                                <div>Manager's Name</div>
+                                <div>{curBuilding.managers_name}</div>
+                              </div>
+                              <div className="info-inline">
+                                <div>Manager's Email</div>
+                                <div>{curBuilding.managers_email}</div>
+                              </div>
+                              <div className="info-inline">
+                                <div>Code</div>
+                                <div>{curBuilding.code}</div>
+                              </div>
+                              <div className="info-inline">
+                                <div>Address</div>
+                                <div>{curBuilding.address}</div>
+                              </div>
+                              <div className="info-inline">
+                                <div>City</div>
+                                <div>{curBuilding.city}</div>
+                              </div>
+                              <div className="info-inline">
+                                <div>State</div>
+                                <div>{curBuilding.state}</div>
+                              </div>
+                            </>
+                          )
+                        }
                       </div>
                     </Col>
-                    <Col md={12}>
-                      <Form.Group className="mb-3" controlId="description">
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control as="textarea" name="description" isInvalid={!!errors.description} value={values.description} onChange={handleChange} />
-                      </Form.Group>
-                    </Col>
-                    <div className="tw-flex tw-flex-column tw-justify-end">
-                      <Button type="submit"><i className="fas fa-save"></i>&nbsp; Submit</Button>
-                    </div>
+                    {
+                      curBuilding.building_id && (
+                        <>
+                          <Col md={12}>
+                            <Form.Group className="mb-3" controlId="description">
+                              <Form.Label>Description</Form.Label>
+                              <Form.Control as="textarea" name="description" isInvalid={!!errors.description} value={values.description} onChange={handleChange} />
+                            </Form.Group>
+                          </Col>
+                          <div className="tw-flex tw-flex-column tw-justify-end">
+                            <Button type="submit"><i className="fas fa-save"></i>&nbsp; Submit</Button>
+                          </div>
+                        </>
+                      )}
                   </Row>
                 </div>
                 <div className="tw-p-2">

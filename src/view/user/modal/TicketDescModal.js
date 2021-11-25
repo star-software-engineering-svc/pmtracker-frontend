@@ -38,7 +38,7 @@ export function TicketDescModal({ shown, handleClose, ticket, onSuccess }) {
     <>
       <Modal show={shown} onHide={handleClose} size="md">
         <Modal.Header closeButton>
-          <Modal.Title>Update Ticket Status</Modal.Title>
+          <Modal.Title>Reply to resident</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div>

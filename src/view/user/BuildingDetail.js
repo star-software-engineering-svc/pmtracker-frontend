@@ -31,7 +31,7 @@ export function BuildingDetail() {
     internal_notes: []
   });
 
-  useEffect(() => {
+  const refreshBuilding = () => {
     getBuilding(token, user.permission, building_id).then((response) => {
       const { data } = response;
       setBinfo(data);
@@ -41,6 +41,10 @@ export function BuildingDetail() {
         dispatch(setUser(null));
       }
     });
+  }
+
+  useEffect(() => {
+    refreshBuilding();
   }, []);
 
   return (
@@ -121,10 +125,32 @@ export function BuildingDetail() {
             <BoardMemberList building_id={building_id} />
           </Tab>
           <Tab eventKey="tickets" title="Tickets">
-            <BuildingTicketsList building_id={building_id} />
+            <BuildingTicketsList building_id={building_id} refreshBuilding={refreshBuilding} />
           </Tab>
           <Tab eventKey="internal_notes" title="Internal Notes">
-
+            <div>
+              {binfo.internal_notes.length > 0 && (
+                binfo.internal_notes.map(note => {
+                  return (
+                    <div className="tw-bg-white tw-rounded-md tw-p-2 tw-mb-2">
+                      <div className="tw-grid tw-grid-cols-4">
+                        <div>
+                          <div>Ticket Code: <span className="tw-font-bold">{note.ticket_code}</span></div>
+                          <div>Cost: <span className="tw-font-bold">{note.cost}</span></div>
+                          <div>Created Date: <span className="tw-font-bold">{note.create_date}</span></div>
+                        </div>
+                        <div className="tw-col-span-3">
+                          <div className="tw-flex tw-flex-col tw-justify-center">
+                            <div>Description</div>
+                            <div className="tw-bg-gray-200 tw-p-1" dangerouslySetInnerHTML={{ __html: note.description }}></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })
+              )}
+            </div>
           </Tab>
         </Tabs>
       </div>
