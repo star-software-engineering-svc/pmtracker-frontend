@@ -77,6 +77,16 @@ export function Buildings() {
     fetchBuildings(1); // fetch page 1 of users
   }, []);
 
+  const conditionalRowStyles = [
+    {
+      when: row => row.changed_tickets_count > 0,
+      style: {
+        backgroundColor: '#EF4444',
+        color: 'white'
+      },
+    }
+  ];
+
   const columns = [
     {
       name: 'No',
@@ -125,6 +135,7 @@ export function Buildings() {
         </div>
         <hr />
         <DataTable
+          conditionalRowStyles={conditionalRowStyles}
           columns={columns}
           data={data}
           progressPending={loading}

@@ -151,7 +151,13 @@ export function TicketForm() {
     <div className="tw-container tw-mx-auto">
       <div className="tw-m-3 tw-p-3 tw-rounded-lg tw-bg-green-100">
         <div className="tw-text-center tw-p-5">
-          <span className="tw-text-xl">New Ticket Form</span>
+          {(reviewed == 1 && curBuilding.building_id > 0) && (<span className="tw-text-xl">New Ticket Form</span>)}
+          {(reviewed == 0 && curBuilding.building_id > 0) && (
+            <span className="tw-text-xl">
+              Please review existing global building notices below.<br />
+              If your issue hasn't already been recently reported, <br />
+              please click on the <span className="tw-font-bold">"continue"</span> button below to proceed
+            </span>)}
         </div>
 
         <Formik

@@ -55,7 +55,7 @@ export function TicketDescModal({ shown, handleClose, ticket, onSuccess }) {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={onSave}>Save</Button>
+          <Button onClick={onSave}>Send</Button>
         </Modal.Footer>
       </Modal>
     </>

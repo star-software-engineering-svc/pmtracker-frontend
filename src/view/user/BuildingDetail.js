@@ -56,16 +56,8 @@ export function BuildingDetail() {
         <div className="tw-grid tw-grid-cols-2">
           <div>
             <div className="info-inline">
-              <div>ID:</div>
-              <div>{binfo.building.building_id}</div>
-            </div>
-            <div className="info-inline">
               <div>Name:</div>
               <div>{binfo.building.name}</div>
-            </div>
-            <div className="info-inline">
-              <div>Code:</div>
-              <div>{binfo.building.code}</div>
             </div>
             <div className="info-inline">
               <div>Type:</div>
@@ -73,45 +65,17 @@ export function BuildingDetail() {
             </div>
             <div className="info-inline">
               <div>Address:</div>
-              <div>{binfo.building.address}</div>
-            </div>
-            <div className="info-inline">
-              <div>City:</div>
-              <div>{binfo.building.city}</div>
-            </div>
-            <div className="info-inline">
-              <div>State:</div>
-              <div>{binfo.building.state}</div>
-            </div>
-            <div className="info-inline">
-              <div>Zip Code:</div>
-              <div>{binfo.building.zip}</div>
+              <div>{binfo.building.address}, {binfo.building.city}, {binfo.building.state}, {binfo.building.zip}</div>
             </div>
           </div>
           <div>
             <div className="info-inline">
+              <div>Code:</div>
+              <div>{binfo.building.code}</div>
+            </div>
+            <div className="info-inline">
               <div>Number of Units:</div>
               <div>{binfo.building.number_of_units}</div>
-            </div>
-            <div className="info-inline">
-              <div>Supers Name:</div>
-              <div>{binfo.building.supers_name}</div>
-            </div>
-            <div className="info-inline">
-              <div>Supers Email:</div>
-              <div>{binfo.building.supers_email}</div>
-            </div>
-            <div className="info-inline">
-              <div>Supers Cell:</div>
-              <div>{binfo.building.supers_cell}</div>
-            </div>
-            <div className="info-inline">
-              <div>Multiple Addresses:</div>
-              <div>{binfo.building.multiple_addresses_text}</div>
-            </div>
-            <div className="info-inline">
-              <div>Created At:</div>
-              <div>{binfo.building.create_date}</div>
             </div>
             <div className="info-inline">
               <div>Building Notes:</div>
@@ -120,7 +84,7 @@ export function BuildingDetail() {
           </div>
         </div>
         <hr />
-        <Tabs defaultActiveKey="board_members" id="uncontrolled-tab-example" className="mb-3">
+        <Tabs defaultActiveKey="tickets" id="uncontrolled-tab-example" className="mb-3">
           <Tab eventKey="board_members" title="Board Members">
             <BoardMemberList building_id={building_id} />
           </Tab>

@@ -129,6 +129,7 @@ export function BuildingTicketsList({ building_id, refreshBuilding }) {
                         <div onClick={() => { onClickTicketStatus(ticket) }} className={'tw-cursor-pointer tw-text-white tw-p-1 tw-text-center ' + (ticket.ticket_status_id == 1 ? 'tw-bg-green-400' : (ticket.ticket_status_id == 2 ? 'tw-bg-yellow-400' : 'tw-bg-red-400'))}>
                           {ticket.ticket_status_name}
                         </div>
+                        <div className="tw-text-right tw-italic tw-text-xs tw-text-gray-300">Click to change the status</div>
                       </div>
                     </div>
                     <div className="info-inline">
