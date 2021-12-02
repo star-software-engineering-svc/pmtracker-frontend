@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { getToken, setToken, getUser, setUser } from '../../../features/user/userSlice';
 
-import { warning } from '../../helper/snack';
+import { info, warning } from '../../helper/snack';
 import { updateTicketDesc } from '../../../service/ManagerService';
 
 export function TicketDescModal({ shown, handleClose, ticket, onSuccess }) {
@@ -22,6 +22,7 @@ export function TicketDescModal({ shown, handleClose, ticket, onSuccess }) {
       const { type } = response.data;
       if (type == "S_OK") {
         onSuccess();
+        info("The message is sent to the resident successfully.");
       }
     }).catch((error) => {
       const { status, data } = error.response;

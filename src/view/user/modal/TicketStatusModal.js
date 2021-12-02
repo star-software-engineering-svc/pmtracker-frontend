@@ -5,7 +5,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { updateTicketStatus } from '../../../service/ManagerService';
 import { getToken, setToken, getUser, setUser } from '../../../features/user/userSlice';
 
-import { warning } from '../../helper/snack';
+import { info, warning } from '../../helper/snack';
 
 export function TicketStatusModal({ shown, handleClose, ticket, onSuccess }) {
 
@@ -23,6 +23,7 @@ export function TicketStatusModal({ shown, handleClose, ticket, onSuccess }) {
       const { type } = response.data;
       if (type == "S_OK") {
         onSuccess();
+        info("Ticket's status is updated successfully.");
       }
     }).catch((error) => {
       const { status, data } = error.response;
