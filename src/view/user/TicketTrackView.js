@@ -9,17 +9,18 @@ import {
 } from '../../features/user/userSlice';
 
 import { getTicket4Track } from '../../service/ManagerService';
-import { warning } from '../helper/snack';
+import { info, warning } from '../helper/snack';
 import { Button } from 'react-bootstrap';
+import { Respond2PmModal } from './modal/Respond2PmModal';
 
 export function TicketTrackView() {
 
   let { ticket_id, ticket_token } = useParams();
-  console.log(ticket_id, ticket_token);
-
   const dispatch = useDispatch();
   const user = useSelector(getUser);
   const navigate = useNavigate();
+
+  const [modalShown, setModalShown] = useState(false);
 
   const [ticket, setTicket] = useState({
     ticket_category: {},
@@ -28,6 +29,19 @@ export function TicketTrackView() {
 
   const onAddTicket = () => {
     navigate("/ticket/new");
+  }
+
+  const onCloseModal = () => {
+    setModalShown(false);
+  }
+
+  const onRespond2Pm = () => {
+    setModalShown(true);
+  }
+
+  const onSent = () => {
+    info("We have sent an email to property manager successfully!");
+    setModalShown(false);
   }
 
   useEffect(() => {
@@ -105,13 +119,15 @@ export function TicketTrackView() {
               </div>
             </div>
             <div className="tw-flex tw-flex-column tw-justify-center mt-2">
-              <Button onClick={onAddTicket}>Add a Ticket</Button>
+              <Button onClick={onAddTicket}>Add a Ticket</Button>&nbsp;
+              <Button onClick={onRespond2Pm} variant="success">Respond to Property Manager</Button>
             </div>
           </div>
           <div className="tw-p-2">
           </div>
         </div>
       </div>
+      <Respond2PmModal shown={modalShown} handleClose={onCloseModal} token={ticket_token} ticket={ticket} onSuccess={onSent} />
     </div >
   );
 }

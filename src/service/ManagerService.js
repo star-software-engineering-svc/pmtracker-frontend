@@ -136,6 +136,14 @@ export function addInternalNote(token, permission, ticket_id, cost, message) {
     });
 }
 
+export function sendMsg2Pm(token, ticket_id, message) {
+  return instance.post('ticket/send-message-to-pm', {
+    ticket_id: ticket_id,
+    message: message,
+    token: token
+  });
+}
+
 export function getInternalNotes(token, permission, building_id) {
   return instance.get('manager/internal-note/get-note-list', {
     params: {

@@ -17,7 +17,7 @@ export function CallPmTrackModal({ show, handleClose }) {
             <span className="tw-text-2xl tw-font-medium">(844-768-7225)</span>
           </div>
           <div className="tw-flex tw-flex-row tw-justify-center">
-            <img src="http://pmtrackerv2.com/images/big-phone.png" />
+            <img src="http://localhost:8894/images/big-phone.png" />
           </div>
         </Modal.Body>
       </Modal>

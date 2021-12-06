@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://pmtrackerv2.com/api/'
+  baseURL: 'http://localhost:8894/api/'
 });
 
 instance.interceptors.request.use(
