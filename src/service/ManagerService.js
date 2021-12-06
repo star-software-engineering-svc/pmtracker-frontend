@@ -61,11 +61,12 @@ export function getBoardMembers(token, permission, building_id) {
   });
 }
 
-export function getBuildingTickets(token, permission, building_id) {
+export function getBuildingTickets(token, permission, building_id, sortStatusDir) {
   return instance.get('manager/buildings/building-tickets', {
     params: {
       permission: permission,
-      building_id: building_id
+      building_id: building_id,
+      sortStatusDir: sortStatusDir
     },
     headers: {
       'Authorization': `Bearer ${token}`
@@ -233,11 +234,12 @@ export function boardLogin(code, password) {
     });
 }
 
-export function getBoardTickets(token, building_id) {
+export function getBoardTickets(token, building_id, sortStatusDir) {
   return instance.get('board/get-board-tickets', {
     params: {
       token,
-      building_id
+      building_id,
+      sortStatusDir
     }
   });
 }

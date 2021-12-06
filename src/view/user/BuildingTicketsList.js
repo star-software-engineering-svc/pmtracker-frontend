@@ -27,6 +27,7 @@ export function BuildingTicketsList({ building_id, refreshBuilding }) {
   const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [detailIdx, setDetailIdx] = useState(null);
+  const [sortStatusDir, setSortStatusDir] = useState('asc');
 
   const [currentTicket, setCurrentTicket] = useState({});
   const [ticketModalShow, setTicketModalShow] = useState(false);
@@ -62,13 +63,20 @@ export function BuildingTicketsList({ building_id, refreshBuilding }) {
     refreshBuilding();
   }
 
+  const onSortStatus = () => {
+    if (sortStatusDir == 'asc')
+      setSortStatusDir('desc');
+    else
+      setSortStatusDir('asc');
+  }
+
   const loadTickets = () => {
     setTicketModalShow(false);
     setNotifyModalShow(false);
     setTicketDescModalShow(false);
     setInternalNoteModalShow(false);
 
-    getBuildingTickets(token, user.permission, building_id).then((response) => {
+    getBuildingTickets(token, user.permission, building_id, sortStatusDir).then((response) => {
       const { tickets } = response.data;
       setTickets(tickets);
     }).catch((error) => {
@@ -90,7 +98,7 @@ export function BuildingTicketsList({ building_id, refreshBuilding }) {
 
   useEffect(() => {
     loadTickets();
-  }, []);
+  }, [sortStatusDir]);
 
   return (
     <>
@@ -102,7 +110,11 @@ export function BuildingTicketsList({ building_id, refreshBuilding }) {
               <th>Resident Name</th>
               <th>Unit #</th>
               <th>Ticket Category</th>
-              <th>Status</th>
+              <th onClick={onSortStatus} className="tw-cursor-pointer">
+                Status&nbsp;
+                {sortStatusDir == 'asc' && (<i className="fas fa-sort-up"></i>)}
+                {sortStatusDir == 'desc' && (<i className="fas fa-sort-down"></i>)}
+              </th>
               <th>Actions</th>
             </tr>
           </thead>

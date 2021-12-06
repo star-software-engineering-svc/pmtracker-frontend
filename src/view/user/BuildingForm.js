@@ -456,7 +456,7 @@ export function BuildingForm() {
                         <Form.Control.Feedback type="invalid">{errors.repassword}</Form.Control.Feedback>
                       </Form.Group>
                     </Col>
-                    <Col md={12} className="tw-hidden">
+                    <Col md={12}>
                       <div className="tw-bg-green-200 tw-p-2 tw-rounded-md tw-font-medium">
                         Add More Board Members?
                       </div>
@@ -533,7 +533,7 @@ export function BuildingForm() {
                 </Form.Group>
               </div>
               <div className="tw-flex tw-flex-column tw-justify-end">
-                <Button type="submit"><i className="fas fa-save"></i>&nbsp; Submit</Button>
+                <Button type="submit"><i className="fas fa-save"></i>&nbsp; Save</Button>
               </div>
             </Form>
           )}
