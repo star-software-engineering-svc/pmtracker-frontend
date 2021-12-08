@@ -119,7 +119,6 @@ export function TicketTrackView() {
               </div>
             </div>
             <div className="tw-flex tw-flex-column tw-justify-center mt-2">
-              <Button onClick={onAddTicket}>Add a Ticket</Button>&nbsp;
               <Button onClick={onRespond2Pm} variant="success">Respond to Property Manager</Button>
             </div>
           </div>
